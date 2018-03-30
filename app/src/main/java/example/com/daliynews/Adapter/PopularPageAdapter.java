@@ -1,11 +1,13 @@
 package example.com.daliynews.Adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import example.com.daliynews.OnRecyclerItemClickListener;
 import example.com.daliynews.R;
 
 /**
@@ -13,6 +15,8 @@ import example.com.daliynews.R;
  */
 
 public class PopularPageAdapter extends RecyclerView.Adapter<PopularPageAdapter.AuthorViewHolder>{
+
+    private OnRecyclerItemClickListener mRecyclerItemClickListener;//声明接口变量
 
     @Override
     public PopularPageAdapter.AuthorViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
@@ -24,8 +28,22 @@ public class PopularPageAdapter extends RecyclerView.Adapter<PopularPageAdapter.
     }
 
     @Override
-    public void onBindViewHolder(PopularPageAdapter.AuthorViewHolder holder, int position) {
+    public void onBindViewHolder(final PopularPageAdapter.AuthorViewHolder holder, int position) {
+        //判断是否设置了监听器
+        if (mRecyclerItemClickListener != null){
+            //为ItemView设置监听器
+            holder.itemView.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view) {
+                    int position = holder.getLayoutPosition();
+                    mRecyclerItemClickListener.onItemClick(holder.itemView, position);
+                }
+            });
+        }
 
+    }
+    public void setOnRecyclerItemClickListener(OnRecyclerItemClickListener mRecyclerItemClickListener){
+        this.mRecyclerItemClickListener = mRecyclerItemClickListener;
     }
 
 

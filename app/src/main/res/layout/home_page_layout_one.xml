@@ -4,7 +4,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#FFFFFF">
+    android:background="#FFFFFF"
+    android:layout_margin = "4dp">
 
     <ImageView
         android:layout_gravity="center"
@@ -20,5 +21,5 @@
         android:layout_height="wrap_content"
         android:textSize="22sp"
         android:textColor="#000000"
-        android:text="  This is big news, there is a while bear who appear in Chongqing"/>
+        android:text="This is big news, there is a while bear who appear in Chongqing"/>
 </LinearLayout>

@@ -1,11 +1,13 @@
 package example.com.daliynews.Adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import example.com.daliynews.OnRecyclerItemClickListener;
 import example.com.daliynews.R;
 
 
@@ -14,6 +16,8 @@ import example.com.daliynews.R;
  */
 
 public class VideoPageAdapter extends RecyclerView.Adapter<VideoPageAdapter.VideoViewHolder>{
+
+    private OnRecyclerItemClickListener mRecyclerItemClickListener;//声明接口变量
 
     @Override
     public VideoViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
@@ -27,8 +31,21 @@ public class VideoPageAdapter extends RecyclerView.Adapter<VideoPageAdapter.Vide
 
 
     @Override
-    public void onBindViewHolder(VideoViewHolder holder, int position) {
-
+    public void onBindViewHolder(final VideoViewHolder holder, int position) {
+        //判断是否设置了监听器
+        if (mRecyclerItemClickListener != null){
+            //为ItemView设置监听器
+            holder.itemView.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view) {
+                    int position = holder.getLayoutPosition();
+                    mRecyclerItemClickListener.onItemClick(holder.itemView, position);
+                }
+            });
+        }
+    }
+    public void setOnRecyclerItemClickListener(OnRecyclerItemClickListener mRecyclerItemClickListener){
+        this.mRecyclerItemClickListener = mRecyclerItemClickListener;
     }
 
 

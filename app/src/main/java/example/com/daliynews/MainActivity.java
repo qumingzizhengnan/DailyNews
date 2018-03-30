@@ -78,7 +78,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mFragmentArrays[1] = TabFragmentPopular.newInstance();
         mFragmentArrays[2] = TabFragmentVideo.newInstance();
 
-        PagerAdapter pagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
+      //  PagerAdapter pagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
+        MyViewPagerAdapter pagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(pagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
     }
