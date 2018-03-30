@@ -5,8 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import example.com.daliynews.R;
+import example.com.daliynews.interfaces.OnItemClickListener;
 
 
 /**
@@ -15,6 +17,7 @@ import example.com.daliynews.R;
 
 public class VideoPageAdapter extends RecyclerView.Adapter<VideoPageAdapter.VideoViewHolder>{
 
+    private OnItemClickListener onItemClickListener;//声明接口变量
     @Override
     public VideoViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
 
@@ -27,8 +30,22 @@ public class VideoPageAdapter extends RecyclerView.Adapter<VideoPageAdapter.Vide
 
 
     @Override
-    public void onBindViewHolder(VideoViewHolder holder, int position) {
+    public void onBindViewHolder(final VideoViewHolder holder, int position) {
+        //判断是否设置了监听器
+        if (onItemClickListener != null){
 
+            //为ItemView设置监听器
+            holder.itemView.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view) {
+                    int position = holder.getLayoutPosition();
+                    onItemClickListener.onItemClick(holder.itemView, position);
+                }
+            });
+        }
+    }
+    public void setOnItemClickListener(OnItemClickListener mOnItemClickListener){
+        this.onItemClickListener = mOnItemClickListener;
     }
 
 
@@ -42,10 +59,12 @@ public class VideoPageAdapter extends RecyclerView.Adapter<VideoPageAdapter.Vide
 //        VideoView videoView;
 
         ImageView imgView;
+        TextView title;
         public VideoViewHolder(View itemView){
             super(itemView);
             //videoView = (VideoView) itemView.findViewById(R.id.videoView);
             imgView = (ImageView) itemView.findViewById(R.id.img_video);
+            title = (TextView) itemView.findViewById(R.id.tv_title);
         }
     }
 }

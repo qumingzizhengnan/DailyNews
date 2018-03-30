@@ -12,9 +12,9 @@
         android:id="@+id/tablayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#E0E0E0"
-        app:tabIndicatorColor="@color/ind_red"
-        app:tabTextColor="@android:color/black"
+        android:background="#1d2088"
+        app:tabIndicatorColor="@android:color/white"
+        app:tabTextColor="@android:color/white"
         app:tabIndicatorHeight="5dp"
 
         />
@@ -24,6 +24,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@android:color/white" />
+        android:background="#f0f0f0" />
 
 </LinearLayout>
