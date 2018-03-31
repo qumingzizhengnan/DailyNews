@@ -20,7 +20,7 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:padding="16dp"
-                android:text="NEWS NEWS NEWS NEWS NEWS NEWS NEWS NEWS NEWS NEWS"
+                android:text=""
                 android:textSize="28sp" />
 
             <ImageView
@@ -34,10 +34,10 @@
             <TextView
                 android:id="@+id/tv_newsContent"
                 android:layout_width="match_parent"
-                android:layout_height="193dp"
+                android:layout_height="wrap_content"
                 android:background="@android:color/white"
                 android:padding="16dp"
-                android:text="NEWS NEWS NEWS NEWS NEWS NEWS NEWS NEWS NEWS NEWS"
+                android:text=""
                 android:textSize="20sp" />
 
         </LinearLayout>
