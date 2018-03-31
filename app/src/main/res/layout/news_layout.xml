@@ -18,20 +18,24 @@
                 android:id="@+id/tv_newsTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@android:color/white"
                 android:padding="16dp"
                 android:text="NEWS NEWS NEWS NEWS NEWS NEWS NEWS NEWS NEWS NEWS"
-                android:textSize="25sp" />
+                android:textSize="28sp" />
 
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                app:srcCompat="@drawable/bear" />
+                android:layout_height="180dp"
+                app:srcCompat="@drawable/bear"
+                android:background="@android:color/white"
+                android:padding="16dp"/>
 
             <TextView
                 android:id="@+id/tv_newsContent"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="193dp"
+                android:background="@android:color/white"
                 android:padding="16dp"
                 android:text="NEWS NEWS NEWS NEWS NEWS NEWS NEWS NEWS NEWS NEWS"
                 android:textSize="20sp" />

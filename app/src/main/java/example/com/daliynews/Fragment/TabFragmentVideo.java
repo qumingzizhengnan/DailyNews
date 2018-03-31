@@ -1,5 +1,6 @@
 package example.com.daliynews.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -7,9 +8,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import example.com.daliynews.Adapter.VideoPageAdapter;
+import example.com.daliynews.NewsActivity;
 import example.com.daliynews.R;
+import example.com.daliynews.interfaces.OnItemClickListener;
 
 /**
  * Created by CJ on 2018/3/27.
@@ -33,7 +37,16 @@ public class TabFragmentVideo extends Fragment {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(new VideoPageAdapter());
+        VideoPageAdapter mVideoPageAdapter = new VideoPageAdapter();
+        mVideoPageAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Toast.makeText(getActivity(),  "sssssssss", Toast.LENGTH_SHORT).show();
+                //Intent intent = new Intent(getActivity(), NewsActivity.class);
+                //startActivity(intent);
+            }
+        });
+        recyclerView.setAdapter(mVideoPageAdapter);
         return  rootView;
     }
 }
