@@ -26,6 +26,8 @@
             android:id="@+id/tv_title_popular"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:layout_alignParentTop="true"
             android:text="新闻标题"
             android:textColor="@color/blue_light"
