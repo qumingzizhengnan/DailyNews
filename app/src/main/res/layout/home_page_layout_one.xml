@@ -15,10 +15,12 @@
         app:srcCompat="@drawable/bear" />
 
     <TextView
+        android:textAlignment="center"
+        android:padding="16dp"
         android:id="@+id/tv_item_one"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="22sp"
         android:textColor="#000000"
-        android:text="  This is big news, there is a while bear who appear in Chongqing"/>
+        android:text="news news "/>
 </LinearLayout>
