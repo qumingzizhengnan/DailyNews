@@ -1,14 +1,17 @@
 package example.com.daliynews.Adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import example.com.daliynews.R;
-import example.com.daliynews.interfaces.OnItemClickListener;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 
 
 /**
@@ -17,7 +20,11 @@ import example.com.daliynews.interfaces.OnItemClickListener;
 
 public class VideoPageAdapter extends RecyclerView.Adapter<VideoPageAdapter.VideoViewHolder>{
 
-    private OnItemClickListener onItemClickListener;//声明接口变量
+    private Context mContext;
+    private String url = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+    public VideoPageAdapter(Context context){
+        mContext = context;
+    }
     @Override
     public VideoViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
 
@@ -31,22 +38,16 @@ public class VideoPageAdapter extends RecyclerView.Adapter<VideoPageAdapter.Vide
 
     @Override
     public void onBindViewHolder(final VideoViewHolder holder, int position) {
-        //判断是否设置了监听器
-        if (onItemClickListener != null){
-
-            //为ItemView设置监听器
-            holder.itemView.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View view) {
-                    int position = holder.getLayoutPosition();
-                    onItemClickListener.onItemClick(holder.itemView, position);
-                }
-            });
+        JCVideoPlayerStandard player = holder.videoPlayer;
+        if (player != null) {
+            player.release();
+        }
+        boolean setUp = player.setUp(url, JCVideoPlayer.SCREEN_LAYOUT_LIST, "");
+        if (setUp) {
+            Glide.with(mContext).load("https://github.com/qumingzizhengnan/DailyNews/blob/dev_part1/app/src/main/res/drawable/icon_toolbar_title.png").into(player.thumbImageView);
         }
     }
-    public void setOnItemClickListener(OnItemClickListener mOnItemClickListener){
-        this.onItemClickListener = mOnItemClickListener;
-    }
+
 
 
     @Override
@@ -55,16 +56,12 @@ public class VideoPageAdapter extends RecyclerView.Adapter<VideoPageAdapter.Vide
     }
 
     class VideoViewHolder extends RecyclerView.ViewHolder{
-
-//        VideoView videoView;
-
-        ImageView imgView;
-        TextView title;
+        TextView tv;
+        JCVideoPlayerStandard videoPlayer;
         public VideoViewHolder(View itemView){
             super(itemView);
-            //videoView = (VideoView) itemView.findViewById(R.id.videoView);
-            imgView = (ImageView) itemView.findViewById(R.id.img_video);
-            title = (TextView) itemView.findViewById(R.id.tv_title);
+            tv = (TextView)itemView.findViewById(R.id.tv_item_videotitle);
+            videoPlayer =  (JCVideoPlayerStandard) itemView.findViewById(R.id.player_item_video);
         }
     }
 }
