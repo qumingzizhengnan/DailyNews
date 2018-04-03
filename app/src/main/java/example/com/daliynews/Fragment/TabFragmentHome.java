@@ -4,6 +4,7 @@ package example.com.daliynews.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,10 +19,8 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.List;
 
 import example.com.daliynews.Adapter.HomePageAdapter;
-import example.com.daliynews.Adapter.PopularPageAdapter;
 import example.com.daliynews.NewsActivity;
 import example.com.daliynews.R;
 import example.com.daliynews.interfaces.OnItemClickListener;
@@ -60,9 +59,9 @@ public class TabFragmentHome extends Fragment {
 
         if(NetWorkUtil.isNetworkConnected(getContext())){
 
-            Observable<ArrayList<List<String>>> observable =  Observable.create(new ObservableOnSubscribe<ArrayList<List<String>>>() {
+            Observable<ArrayList<ArrayList<String>>> observable =  Observable.create(new ObservableOnSubscribe<ArrayList<ArrayList<String>>>() {
                 @Override
-                public void subscribe(final ObservableEmitter<ArrayList<List<String>>> emitter ) throws Exception {
+                public void subscribe(final ObservableEmitter<ArrayList<ArrayList<String>>> emitter ) throws Exception {
 
                     //连接网络，获得xml数据
                     OkHttpClient okHttpClient = new OkHttpClient();
@@ -77,17 +76,23 @@ public class TabFragmentHome extends Fragment {
                         e.printStackTrace();
                     }
 
-                    String xmlResult = response.body().string();
-                    ArrayList<List<String>> container  = parseXMLWithPull(xmlResult);
+                    if(response!=null){
+                        String xmlResult = response.body().string();
+                        ArrayList<ArrayList<String>> container  = parseXMLWithPull(xmlResult);
+                        emitter.onNext(container);
+                    } else {
+                        Log.d("tag","response is null");
+                    }
 
-                    emitter.onNext(container);
-                    Log.d("tag","发送container");
                 }
             });
 
-            Consumer<ArrayList<List<String>>> consumer = new Consumer<ArrayList<List<String>>>() {
+            Consumer<ArrayList<ArrayList<String>>> consumer = new Consumer<ArrayList<ArrayList<String>>>() {
                 @Override
-                public void accept(final ArrayList<List<String>> containerList) throws Exception {
+                public void accept(final ArrayList<ArrayList<String>> containerList) throws Exception {
+
+                    //SwipeRefreshLayout initial
+                    final SwipeRefreshLayout mRefreshLayout = (SwipeRefreshLayout)rootView.findViewById(R.id.layout_swipe_refresh);
                     //RecycleView 的初始化
                     RecyclerView recyclerView =(RecyclerView) rootView.findViewById(R.id.recycler);
 
@@ -95,15 +100,16 @@ public class TabFragmentHome extends Fragment {
                     layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
                     recyclerView.setLayoutManager(layoutManager);
-                    HomePageAdapter adapter = new HomePageAdapter(getActivity(),containerList);
+                    HomePageAdapter adapter = new HomePageAdapter(getActivity().getApplication(),containerList);
 
                     //为Adpter 设置监听事件
                     adapter.setOnItemClickListen(new OnItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
-                            Toast.makeText(getActivity(),  ((ArrayList<String>)containerList.get(2)).get(position), Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getActivity(),  ((ArrayList<String>)containerList.get(2)).get(position), Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getActivity(),NewsActivity.class);
                             intent.putExtra("URL",((ArrayList<String>)containerList.get(2)).get(position));
+                            intent.putExtra("IMG_URL",((ArrayList<String>)containerList.get(4)).get(position));
                             startActivity(intent);
 
 
@@ -111,6 +117,16 @@ public class TabFragmentHome extends Fragment {
                     });
                     recyclerView.setAdapter(adapter);
 
+                    //up pull for refreshing
+                    mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
+                        public void onRefresh() {
+                            //TODO: finish refresh operation
+
+                            //数据重新加载完成后，提示数据发生改变，并且设置现在不在刷新
+                            //adapter.notifyDataSetChanged();
+                            mRefreshLayout.setRefreshing(false);
+                        }
+                    });
                 }
             };
 
@@ -125,30 +141,12 @@ public class TabFragmentHome extends Fragment {
         }
 
 
-
-
-
-//        RecyclerView recyclerView =(RecyclerView) rootView.findViewById(R.id.recycler);
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-//        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-//
-//        recyclerView.setLayoutManager(layoutManager);
-//        HomePageAdapter mHomePageAdapter = new HomePageAdapter();
-//        mHomePageAdapter.setOnItemClickListener(new OnItemClickListener() {
-//            @Override
-//            public void onItemClick(View view, int position) {
-//                Toast.makeText(getActivity(),  "sssssssss", Toast.LENGTH_SHORT).show();
-//                //Intent intent = new Intent(getActivity(), NewsActivity.class);
-//                //startActivity(intent);
-//            }
-//        });
-//        recyclerView.setAdapter(mHomePageAdapter);
         return  rootView;
     }
 
-    private ArrayList<List<String>> parseXMLWithPull(String xmlData) {
+    private ArrayList<ArrayList<String>> parseXMLWithPull(String xmlData) {
 
-        ArrayList<List<String>> container = new ArrayList<List<String>>();
+        ArrayList<ArrayList<String>> container = new ArrayList<ArrayList<String>>();
         ArrayList<String> descriptionList = new ArrayList<String>();
         ArrayList<String> linkList = new ArrayList<String>();
         ArrayList<String> dateList = new ArrayList<String>();
@@ -225,8 +223,11 @@ public class TabFragmentHome extends Fragment {
         container.add(dateList);
         container.add(pictureUrlList);
 
-        Log.d("tag","解析结束");
+        //Log.d("tag","解析结束");
         return  container;
     }
+
+
+
 
 }

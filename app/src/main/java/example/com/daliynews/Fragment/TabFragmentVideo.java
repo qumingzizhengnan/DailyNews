@@ -65,7 +65,7 @@ public class TabFragmentVideo extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        JCVideoPlayer.releaseAllVideos();
+        //JCVideoPlayer.releaseAllVideos();
     }
 
 }

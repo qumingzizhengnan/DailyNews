@@ -1,32 +1,32 @@
 package example.com.daliynews;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.View;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import example.com.daliynews.Fragment.TabFragmentHome;
 import example.com.daliynews.Fragment.TabFragmentPopular;
 import example.com.daliynews.Fragment.TabFragmentVideo;
+import example.com.daliynews.database.DBOperation;
+import example.com.daliynews.until.SharedPreferenceCacheUtil;
+
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    //分页显示
+    //these components are used to show pages
     private TabLayout tabLayout = null;
     private ViewPager viewPager ;
     private Fragment[] mFragmentArrays = new Fragment[3];
@@ -37,6 +37,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        //initial the database
+        DBOperation dbOperate = new DBOperation(getApplication());
+
+
+        //init sharedpreference
+        SharedPreferenceCacheUtil.init(getApplication());
+        Log.d("tag","初始化sharaePreference 成功");
 
         //Toolbar +  drawerlayout
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -139,7 +148,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        return super.onOptionsItemSelected(item);
 //    }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+
+
+    /**
+     * show slide bar
+     */
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
