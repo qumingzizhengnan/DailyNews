@@ -3,6 +3,7 @@ package example.com.daliynews.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -57,7 +58,6 @@ public class TabFragmentPopular extends Fragment {
 
 
         if(NetWorkUtil.isNetworkConnected(getContext())){
-
             Observable<ArrayList<List<String>>> observable =  Observable.create(new ObservableOnSubscribe<ArrayList<List<String>>>() {
                 @Override
                 public void subscribe(final ObservableEmitter<ArrayList<List<String>>> emitter ) throws Exception {
@@ -75,17 +75,23 @@ public class TabFragmentPopular extends Fragment {
                         e.printStackTrace();
                     }
 
-                    String xmlResult = response.body().string();
-                    ArrayList<List<String>> container  = parseXMLWithPull(xmlResult);
+                    if(response!=null){
+                        String xmlResult = response.body().string();
+                        ArrayList<List<String>> container  = parseXMLWithPull(xmlResult);
+                        emitter.onNext(container);
+                    } else {
+                        Log.d("tag","response is null");
+                    }
 
-                    emitter.onNext(container);
-                    Log.d("tag","发送container");
+
                 }
             });
-
             Consumer<ArrayList<List<String>>> consumer = new Consumer<ArrayList<List<String>>>() {
                 @Override
                 public void accept(final ArrayList<List<String>> containerList) throws Exception {
+
+                    //SwipeRefreshLayout initial
+                    final SwipeRefreshLayout mRefreshLayout = (SwipeRefreshLayout)rootView.findViewById(R.id.layout_swipe_refresh);
                     //RecycleView 的初始化
                     RecyclerView recyclerView =(RecyclerView) rootView.findViewById(R.id.recycler);
 
@@ -93,21 +99,34 @@ public class TabFragmentPopular extends Fragment {
                     layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
                     recyclerView.setLayoutManager(layoutManager);
-                    PopularPageAdapter adapter = new PopularPageAdapter(getActivity(),containerList);
+                    final PopularPageAdapter adapter = new PopularPageAdapter(getActivity().getApplication(),containerList,layoutManager);
 
                     //为Adpter 设置监听事件
                     adapter.setOnItemClickListner(new OnItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
-                            Toast.makeText(getActivity(),  ((ArrayList<String>)containerList.get(2)).get(position), Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getActivity(),  ((ArrayList<String>)containerList.get(2)).get(position), Toast.LENGTH_SHORT).show();
+                            //send the url for news activity
                             Intent intent = new Intent(getActivity(),NewsActivity.class);
                             intent.putExtra("URL",((ArrayList<String>)containerList.get(2)).get(position));
+                            intent.putExtra("IMG_URL",((ArrayList<String>)containerList.get(4)).get(position));
                             startActivity(intent);
-
-
                         }
                     });
                     recyclerView.setAdapter(adapter);
+
+
+                    //up pull for refreshing
+                    mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
+                        public void onRefresh() {
+                            //TODO: finish refresh operation
+
+                            //数据重新加载完成后，提示数据发生改变，并且设置现在不在刷新
+                            //adapter.notifyDataSetChanged();
+                            mRefreshLayout.setRefreshing(false);
+                        }
+                    });
+
 
                 }
             };
@@ -115,21 +134,12 @@ public class TabFragmentPopular extends Fragment {
             observable.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(consumer);
-
-
         } else {
             Log.d("ERR","网络无连接");
             Toast.makeText(getContext(), "网络无连接", Toast.LENGTH_SHORT).show();
         }
 
 
-//        RecyclerView recyclerView =(RecyclerView) rootView.findViewById(R.id.recycler);
-//
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-//        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-//
-//        recyclerView.setLayoutManager(layoutManager);
-//        recyclerView.setAdapter(new PopularPageAdapter());
         return  rootView;
     }
 
@@ -181,11 +191,7 @@ public class TabFragmentPopular extends Fragment {
                     //  完成解析某个结点
                     case XmlPullParser.END_TAG: {
                         if ("item".equals(nodeName)) {
-//                            Log.d("MainActivity", "title is " + title);
-//                            Log.d("MainActivity", "description is " + description);
-//                            Log.d("MainActivity", "link is " + link);
-//                            Log.d("MainActivity", "date is " + date);
-//                            Log.d("MainActivity", "pictureUrl is " + pictureUrl);
+
                             titleList.add(title);
                             descriptionList.add(description);
                             linkList.add(link);
