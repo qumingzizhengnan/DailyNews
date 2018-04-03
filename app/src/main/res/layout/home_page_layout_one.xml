@@ -4,7 +4,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#FFFFFF">
+    android:background="#FFFFFF"
+    android:paddingBottom="4dp">
 
     <ImageView
         android:layout_gravity="center"
@@ -20,7 +21,11 @@
         android:id="@+id/tv_item_one"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="22sp"
-        android:textColor="#000000"
-        android:text="news news "/>
+        android:lines="2"
+        android:ellipsize="end"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/ind_red"
+        android:text="news news "
+        android:paddingBottom="4dp"/>
 </LinearLayout>
