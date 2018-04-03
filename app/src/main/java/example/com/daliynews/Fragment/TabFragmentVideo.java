@@ -11,11 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import cn.jzvd.JZVideoPlayer;
 import example.com.daliynews.Adapter.VideoPageAdapter;
 import example.com.daliynews.NewsActivity;
 import example.com.daliynews.R;
-import example.com.daliynews.interfaces.OnItemClickListener;
-import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
+
 
 /**
  * Created by CJ on 2018/3/27.
@@ -55,7 +55,7 @@ public class TabFragmentVideo extends Fragment {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK){
-                    if (JCVideoPlayer.backPress()){
+                    if (JZVideoPlayer.backPress()){
                         return true;
                     }
                     return false;
@@ -67,7 +67,7 @@ public class TabFragmentVideo extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        JCVideoPlayer.releaseAllVideos();
+        JZVideoPlayer.releaseAllVideos();
     }
 
 }
