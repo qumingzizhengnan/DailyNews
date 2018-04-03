@@ -17,33 +17,54 @@ import example.com.daliynews.until.DownLoadImgUtil;
 
 /**
  * Created by CJ on 2018/3/27.
+ *
+ * this is for homepage's recyclerView adapter
  */
 
+
+/**
+ *Adapter for TabFragmentHome's recyclerView
+ *
+ */
 public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+
     public static final int ONE_ITEM = 1;
     public static final int TWO_ITEM = 2;
 
-    ArrayList<String> titleList;
-    ArrayList<String> picUrlList;
-    ArrayList<String> dateList;
-    private Application context;
+
+    //datas from the internet
+    ArrayList<String> mTitleList;
+    ArrayList<String> mPicUrlList;
+    ArrayList<String> mDateList;
+    private Application mContext;
+
 
     private OnItemClickListener onItemClickListener;//声明接口变量
 
+    /**
+     * Constructor
+     * @param context
+     * @param list  datas from internet
+     */
    public HomePageAdapter(Application context, ArrayList<ArrayList<String>> list){
-        this.context = context;
-
+        this.mContext = context;
 
         if(list!=null){
-            titleList = (ArrayList<String>) list.get(0);
-            dateList = (ArrayList<String>) list.get(3);
-            picUrlList = (ArrayList<String>) list.get(4);
+            mTitleList = (ArrayList<String>) list.get(0);
+            mDateList = (ArrayList<String>) list.get(3);
+            mPicUrlList = (ArrayList<String>) list.get(4);
 
         } else {
             Log.d("tag","Container is  empty " );
         }
     }
 
+    /**
+     * return a view used for show my news
+     * @param parent
+     * @param viewType
+     * @return
+     */
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
@@ -60,29 +81,34 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return holder;
     }
 
+    /**
+     * Bind data with widget
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
 
         if(holder instanceof OneViewHolder){
-            ((OneViewHolder)holder).tv.setText(titleList.get(position));
+            ((OneViewHolder)holder).mTv.setText(mTitleList.get(position));
 
             //异步下载图片并且加载
-            DownLoadImgUtil task = new DownLoadImgUtil(((OneViewHolder) holder).img,context);
-            task.execute(picUrlList.get(position));
+            DownLoadImgUtil task = new DownLoadImgUtil(((OneViewHolder) holder).mImg,mContext);
+            task.execute(mPicUrlList.get(position));
 
 
         } else {
 
-            ((TwoViewHolder)holder).mTitle.setText(titleList.get(position));
-            ((TwoViewHolder)holder).mTime.setText(dateList.get(position));
+            ((TwoViewHolder)holder).mTitle.setText(mTitleList.get(position));
+            ((TwoViewHolder)holder).mTime.setText(mDateList.get(position));
             //异步下载图片并且加载
-            DownLoadImgUtil task = new DownLoadImgUtil(((TwoViewHolder) holder).imgItem,context);
-            task.execute(picUrlList.get(position));
+            DownLoadImgUtil task = new DownLoadImgUtil(((TwoViewHolder) holder).mImgItem,mContext);
+            task.execute(mPicUrlList.get(position));
 
         }
 
 
-       //添加监听事件
+       //添加监听事件  add click listener
         if (onItemClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -95,10 +121,20 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
     //监听事件
+    /**
+     * set clickListener
+     * @param mOnItemClickListener
+     */
     public void setOnItemClickListener(OnItemClickListener mOnItemClickListener){
         this.onItemClickListener = mOnItemClickListener;
     }
 
+    /**
+     * return view type
+     *
+     * @param position  current view's  position
+     * @return
+     */
     @Override
     public int getItemViewType(int position){
         if(position==0){
@@ -108,41 +144,46 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
+    /**
+     *
+     * @return the number of view in RecyclerView
+     */
     @Override
     public int getItemCount(){
         return 10;
     }
 
 
-    public void setOnItemClickListen(OnItemClickListener onItemClickListen){
-       this.onItemClickListener = onItemClickListen;
-    }
-
-
+    /**
+     * this class just a view use for showing the first news in HomePage
+     */
     class OneViewHolder extends RecyclerView.ViewHolder{
 
-        ImageView img;
-        TextView  tv;
+        ImageView mImg;
+        TextView  mTv;
         public OneViewHolder(View view){
             super(view);
-            img = (ImageView) view.findViewById(R.id.image_item_one);
-            tv = (TextView) view.findViewById(R.id.tv_item_one);
+            mImg = (ImageView) view.findViewById(R.id.image_item_one);
+            mTv = (TextView) view.findViewById(R.id.tv_item_one);
         }
 
     }
 
 
+    /**
+     * this class just a view use for showing the other news in HomePage
+     */
     class TwoViewHolder extends RecyclerView.ViewHolder {
 
        //TODO list 每一行的内容
-        ImageView imgItem;
+        ImageView mImgItem;
         TextView mTitle;
         TextView mTime;
 
         public TwoViewHolder(View itemView){
             super(itemView);
             //TODO list 每一行内容初始化
-            imgItem = (ImageView) itemView.findViewById(R.id.iv_portrait_home);
+            mImgItem = (ImageView) itemView.findViewById(R.id.iv_portrait_home);
             mTitle = (TextView) itemView.findViewById(R.id.tv_title_home);
             mTime = (TextView) itemView.findViewById(R.id.tv_time_home);
         }

@@ -19,6 +19,8 @@ import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 
 /**
  * Created by CJ on 2018/3/27.
+ *
+ * show video news
  */
 
 public class TabFragmentVideo extends Fragment {
@@ -65,7 +67,7 @@ public class TabFragmentVideo extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        //JCVideoPlayer.releaseAllVideos();
+        JCVideoPlayer.releaseAllVideos();
     }
 
 }

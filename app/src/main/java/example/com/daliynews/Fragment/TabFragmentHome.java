@@ -38,12 +38,18 @@ import okhttp3.Response;
 
 /**
  * Created by CJ on 2018/3/26.
+ *
+ * a fragment used for showing HomePage news
  */
 
 public class TabFragmentHome extends Fragment {
 
-    private View rootView;
+    private View mRootView;
 
+    /**
+     * get new Fragment
+     * @return
+     */
     public static Fragment newInstance() {
         TabFragmentHome fragment = new TabFragmentHome();
         return fragment;
@@ -51,19 +57,28 @@ public class TabFragmentHome extends Fragment {
     }
 
 
+    /**
+     * init widgets and get news data from internet ,then use the data to init it's adapter
+     *
+     *
+     * @param inflater
+     * @param container
+     * @param saveInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
 
-        rootView = inflater.inflate(R.layout.fragment_tab,container,false);
+        mRootView = inflater.inflate(R.layout.fragment_tab,container,false);
 
-
+        //if we have internet , just get the data
         if(NetWorkUtil.isNetworkConnected(getContext())){
 
             Observable<ArrayList<ArrayList<String>>> observable =  Observable.create(new ObservableOnSubscribe<ArrayList<ArrayList<String>>>() {
                 @Override
                 public void subscribe(final ObservableEmitter<ArrayList<ArrayList<String>>> emitter ) throws Exception {
 
-                    //连接网络，获得xml数据
+                    //连接网络，获得xml数据  connect internet ,get the xml file
                     OkHttpClient okHttpClient = new OkHttpClient();
                     Request requset = new Request.Builder()
                             .url("http://feeds.bbci.co.uk/news/world/rss.xml?edition=uk")
@@ -92,9 +107,9 @@ public class TabFragmentHome extends Fragment {
                 public void accept(final ArrayList<ArrayList<String>> containerList) throws Exception {
 
                     //SwipeRefreshLayout initial
-                    final SwipeRefreshLayout mRefreshLayout = (SwipeRefreshLayout)rootView.findViewById(R.id.layout_swipe_refresh);
-                    //RecycleView 的初始化
-                    RecyclerView recyclerView =(RecyclerView) rootView.findViewById(R.id.recycler);
+                    final SwipeRefreshLayout mRefreshLayout = (SwipeRefreshLayout)mRootView.findViewById(R.id.layout_swipe_refresh);
+                    //RecycleView init
+                    RecyclerView recyclerView =(RecyclerView) mRootView.findViewById(R.id.recycler);
 
                     LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                     layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -102,8 +117,8 @@ public class TabFragmentHome extends Fragment {
                     recyclerView.setLayoutManager(layoutManager);
                     HomePageAdapter adapter = new HomePageAdapter(getActivity().getApplication(),containerList);
 
-                    //为Adpter 设置监听事件
-                    adapter.setOnItemClickListen(new OnItemClickListener() {
+                    //为Adpter 设置监听事件  set clickListener
+                    adapter.setOnItemClickListener(new OnItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
                             //Toast.makeText(getActivity(),  ((ArrayList<String>)containerList.get(2)).get(position), Toast.LENGTH_SHORT).show();
@@ -136,14 +151,22 @@ public class TabFragmentHome extends Fragment {
 
 
         } else {
+            //if we don't have internet ,just remind the user
             Log.d("ERR","网络无连接");
             Toast.makeText(getContext(), "网络无连接", Toast.LENGTH_SHORT).show();
         }
 
 
-        return  rootView;
+        return  mRootView;
     }
 
+    /**
+     *
+     * analyse the xml file and extract some information we need
+     *
+     * @param xmlData
+     * @return useful information
+     */
     private ArrayList<ArrayList<String>> parseXMLWithPull(String xmlData) {
 
         ArrayList<ArrayList<String>> container = new ArrayList<ArrayList<String>>();

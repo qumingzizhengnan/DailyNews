@@ -27,8 +27,8 @@ import example.com.daliynews.until.SharedPreferenceCacheUtil;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     //these components are used to show pages
-    private TabLayout tabLayout = null;
-    private ViewPager viewPager ;
+    private TabLayout mTabLayout = null;
+    private ViewPager mViewPager ;
     private Fragment[] mFragmentArrays = new Fragment[3];
     private String[] mTabTitles = new String[3];
 
@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //initial the database
         DBOperation dbOperate = new DBOperation(getApplication());
-
 
         //init sharedpreference
         SharedPreferenceCacheUtil.init(getApplication());
@@ -73,14 +72,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         //分页显示 tab + viewpager
-        tabLayout = (TabLayout) findViewById(R.id.tablayout);
-        viewPager = (ViewPager) findViewById(R.id.tab_viewpager);
+        mTabLayout = (TabLayout) findViewById(R.id.tablayout);
+        mViewPager = (ViewPager) findViewById(R.id.tab_viewpager);
 
         mTabTitles[0] = "Home";
         mTabTitles[1] = "Popular";
         mTabTitles[2] = "Video";
         //固定三个板块间距
-        tabLayout.setTabMode(TabLayout.MODE_FIXED);
+        mTabLayout.setTabMode(TabLayout.MODE_FIXED);
 
         //实例化三个fragment 每个fragment采用不同的recycleView 适配器，实现不同布局的页面
         mFragmentArrays[0] = TabFragmentHome.newInstance();
@@ -88,12 +87,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mFragmentArrays[2] = TabFragmentVideo.newInstance();
 
         PagerAdapter pagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(pagerAdapter);
-        tabLayout.setupWithViewPager(viewPager);
+        mViewPager.setAdapter(pagerAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 
 
     //ViewPager的适配器
+
+    /**
+     * adapter for viewpager
+     */
     final class MyViewPagerAdapter extends FragmentPagerAdapter {
 
         public MyViewPagerAdapter(FragmentManager fm) {
@@ -116,6 +119,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * the drawerlayout is open when we click back button, close it first
+     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -151,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     /**
-     * show slide bar
+     * show slide bar and define response for those button
      */
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {

@@ -38,24 +38,38 @@ import okhttp3.Response;
 
 /**
  * Created by CJ on 2018/3/27.
+ *
+ * a fragment used for showing PopularPage news
  */
 
 public class TabFragmentPopular extends Fragment {
 
-    private View rootView;
+    private View mRootView;
 
+    /**
+     * get new Fragment
+     * @return
+     */
     public static Fragment newInstance() {
         TabFragmentPopular fragment = new TabFragmentPopular();
         return fragment;
 
     }
 
+    /**
+     * init widgets and get news data from internet ,then use the data to init it's adapter
+     *
+     *
+     * @param inflater
+     * @param container
+     * @param saveInstanceState
+     * @return
+     */
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
 
-        rootView = inflater.inflate(R.layout.fragment_tab,container,false);
-
+        mRootView = inflater.inflate(R.layout.fragment_tab,container,false);
 
         if(NetWorkUtil.isNetworkConnected(getContext())){
             Observable<ArrayList<List<String>>> observable =  Observable.create(new ObservableOnSubscribe<ArrayList<List<String>>>() {
@@ -91,9 +105,9 @@ public class TabFragmentPopular extends Fragment {
                 public void accept(final ArrayList<List<String>> containerList) throws Exception {
 
                     //SwipeRefreshLayout initial
-                    final SwipeRefreshLayout mRefreshLayout = (SwipeRefreshLayout)rootView.findViewById(R.id.layout_swipe_refresh);
+                    final SwipeRefreshLayout mRefreshLayout = (SwipeRefreshLayout)mRootView.findViewById(R.id.layout_swipe_refresh);
                     //RecycleView 的初始化
-                    RecyclerView recyclerView =(RecyclerView) rootView.findViewById(R.id.recycler);
+                    RecyclerView recyclerView =(RecyclerView) mRootView.findViewById(R.id.recycler);
 
                     LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
                     layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -140,9 +154,18 @@ public class TabFragmentPopular extends Fragment {
         }
 
 
-        return  rootView;
+        return  mRootView;
     }
 
+
+
+    /**
+     *
+     * analyse the xml file and extract some information we need
+     *
+     * @param xmlData
+     * @return useful information
+     */
     private ArrayList<List<String>> parseXMLWithPull(String xmlData) {
 
         ArrayList<List<String>> container = new ArrayList<List<String>>();
