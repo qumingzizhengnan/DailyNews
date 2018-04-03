@@ -51,8 +51,8 @@ public class NewsActivity extends AppCompatActivity {
     //从上个页面获取要分析的news 网址
     private Intent mIintentReceiveURL;
     private String mFormerPageImgUrl;
-    private TextView tvTitle;
-    private TextView tvContent;
+    private TextView mTitle;
+    private TextView mContent;
     private ImageView mImg;
 
     @Override
@@ -60,20 +60,15 @@ public class NewsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.news_layout);
 
-
         mImg = (ImageView) findViewById(R.id.img_newPicture);
-        tvTitle = (TextView) findViewById(R.id.tv_newsTitle);
-        tvContent = (TextView) findViewById(R.id.tv_newsContent);
-
+        mTitle = (TextView) findViewById(R.id.tv_newsTitle);
+        mContent = (TextView) findViewById(R.id.tv_newsContent);
 
         //获取网址  get the url of this news from the intent
         mIintentReceiveURL = getIntent();
         final String urlNews = mIintentReceiveURL.getStringExtra("URL");
         mFormerPageImgUrl = mIintentReceiveURL.getStringExtra("IMG_URL");
 
-        if(!urlNews.isEmpty()){
-            //Log.d("tag","url is :"+urlNews);
-        }
 
         if(NetWorkUtil.isNetworkConnected(this)){
             //下载html文件，分析  download html file and analyse
@@ -111,12 +106,11 @@ public class NewsActivity extends AppCompatActivity {
                 @Override
                 public void accept(String s) throws Exception {
 
-
                     StringBuilder stringBuilderContent = new StringBuilder();
                     //doc实例化
                     Document doc = Jsoup.parse(s);
 
-//                    if(doc!=null){
+                    //                    if(doc!=null){
 //                        Log.d("html","Jsoup实例化成功");
 //                    } else {
 //                        Log.d("html","Jsoup实例化失败");
@@ -133,7 +127,7 @@ public class NewsActivity extends AppCompatActivity {
                     //Log.d("html","title of news =  "+ title.text());
 
                     //update  news title
-                    tvTitle.setText(title.text());
+                    mTitle.setText(title.text());
                     SharedPreferenceCacheUtil.editor.putString("title"+urlNews,title.text());
 
                     //获取时间
@@ -153,9 +147,8 @@ public class NewsActivity extends AppCompatActivity {
                         stringBuilderContent.append(e.text() + "\n\n");
                     }
 
-
                     //set new content
-                    tvContent.setText(stringBuilderContent.toString());
+                    mContent.setText(stringBuilderContent.toString());
                     SharedPreferenceCacheUtil.editor.putString("content"+urlNews,stringBuilderContent.toString());
                     SharedPreferenceCacheUtil.editor.commit();
 
@@ -184,10 +177,6 @@ public class NewsActivity extends AppCompatActivity {
                         DownLoadImgUtil task = new DownLoadImgUtil(mImg,getApplication(),true,"img"+urlNews);
                         task.execute(mFormerPageImgUrl);
                     }
-
-
-
-
 
 
                     //download img from net
@@ -220,8 +209,8 @@ public class NewsActivity extends AppCompatActivity {
 
             //get data restored in preference
             SharedPreferences pref = getSharedPreferences("NewsDetailData", MODE_PRIVATE);
-            tvTitle.setText(pref.getString("title"+urlNews,"error"));
-            tvContent.setText(pref.getString("content"+urlNews,"error"));
+            mTitle.setText(pref.getString("title"+urlNews,"error"));
+            mContent.setText(pref.getString("content"+urlNews,"error"));
 
 
             //get data restored in database
@@ -240,6 +229,13 @@ public class NewsActivity extends AppCompatActivity {
     }
 
 
+    /**
+     *
+     * save some string into txt file
+     *
+     * @param inputText
+     * @param fileName
+     */
     public void saveToTxt(String inputText ,String fileName) {
         FileOutputStream out = null;
         BufferedWriter writer = null;

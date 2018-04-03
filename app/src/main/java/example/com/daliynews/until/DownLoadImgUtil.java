@@ -16,6 +16,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+
+/**
+ *
+ * this class are used for download img from Internet and set source file of ImageView
+ */
+
 public class DownLoadImgUtil extends AsyncTask<String ,Void,BitmapDrawable> {
     private ImageView mImageView;
     private String url;
@@ -24,12 +30,24 @@ public class DownLoadImgUtil extends AsyncTask<String ,Void,BitmapDrawable> {
     private String mName;
 
 
+    /**
+     * constructor
+     * @param imageView
+     * @param context
+     */
     public DownLoadImgUtil(ImageView imageView , Application context){
         mImageView = imageView;
         mContext = context;
 
     }
 
+    /**
+     * Constructor
+     * @param imageView
+     * @param context
+     * @param cache   true is keep  img in database
+     * @param name
+     */
     public DownLoadImgUtil(ImageView imageView , Application context , boolean cache, String name){
         mImageView = imageView;
         mContext = context;
@@ -37,6 +55,8 @@ public class DownLoadImgUtil extends AsyncTask<String ,Void,BitmapDrawable> {
         mName = name;
 
     }
+
+
     @Override
     protected BitmapDrawable doInBackground(String... params) {
         url = params[0];
@@ -46,8 +66,15 @@ public class DownLoadImgUtil extends AsyncTask<String ,Void,BitmapDrawable> {
     }
 
 
-
-
+    /**
+     * dowmload img
+     *
+     * @param url
+     * @param cache
+     * @param dbOperation
+     * @param name
+     * @return
+     */
 
     public static Bitmap downLoadBitmap(String url , boolean cache, DBOperation dbOperation, String name) {
         Bitmap bitmap = null;

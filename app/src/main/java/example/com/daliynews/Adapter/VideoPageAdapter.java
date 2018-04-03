@@ -38,14 +38,12 @@ public class VideoPageAdapter extends RecyclerView.Adapter<VideoPageAdapter.Vide
 
     @Override
     public void onBindViewHolder(final VideoViewHolder holder, int position) {
-//        JCVideoPlayerStandard player = holder.videoPlayer;
-//        if (player != null) {
-//            player.release();
-//        }
-//        boolean setUp = player.setUp(url, JCVideoPlayer.SCREEN_LAYOUT_LIST, "");
-       /* if (setUp) {
-            Glide.with(mContext).load("http://a4.att.hudong.com/05/71/01300000057455120185716259013.jpg").into(player.thumbImageView);
-        }*/
+        JCVideoPlayerStandard player = holder.videoPlayer;
+        if (player != null) {
+            player.release();
+        }
+        boolean setUp = player.setUp(url, JCVideoPlayer.SCREEN_LAYOUT_LIST, "");
+
     }
 
 
