@@ -7,11 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 
+import cn.jzvd.JZVideoPlayerStandard;
 import example.com.daliynews.R;
-import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
-import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
+
 
 
 /**
@@ -38,11 +37,9 @@ public class VideoPageAdapter extends RecyclerView.Adapter<VideoPageAdapter.Vide
 
     @Override
     public void onBindViewHolder(final VideoViewHolder holder, int position) {
-        JCVideoPlayerStandard player = holder.videoPlayer;
-        if (player != null) {
-            player.release();
-        }
-        boolean setUp = player.setUp(url, JCVideoPlayer.SCREEN_LAYOUT_LIST, "");
+        JZVideoPlayerStandard player = holder.videoPlayer;
+
+        player.setUp(url, JZVideoPlayerStandard.SCREEN_WINDOW_NORMAL, "DailyNews");
 
     }
 
@@ -55,11 +52,11 @@ public class VideoPageAdapter extends RecyclerView.Adapter<VideoPageAdapter.Vide
 
     class VideoViewHolder extends RecyclerView.ViewHolder{
         TextView tv;
-        JCVideoPlayerStandard videoPlayer;
+        JZVideoPlayerStandard videoPlayer;
         public VideoViewHolder(View itemView){
             super(itemView);
             tv = (TextView)itemView.findViewById(R.id.tv_item_videotitle);
-            videoPlayer =  (JCVideoPlayerStandard) itemView.findViewById(R.id.player_item_video);
+            videoPlayer =  (JZVideoPlayerStandard) itemView.findViewById(R.id.player_item_video);
         }
     }
 }

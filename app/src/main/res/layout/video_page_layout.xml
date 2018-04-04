@@ -7,7 +7,7 @@
     android:layout_margin = "4dp">
 
 
-    <fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard
+    <cn.jzvd.JZVideoPlayerStandard
         android:id="@+id/player_item_video"
         android:layout_width="match_parent"
         android:layout_height="190dp" />
