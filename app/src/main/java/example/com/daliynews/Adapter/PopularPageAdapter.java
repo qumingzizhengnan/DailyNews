@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ import example.com.daliynews.until.DownLoadImgUtil;
  *Adapter for TabFragmentPopular's recyclerView
  *
  */
-public class PopularPageAdapter extends RecyclerView.Adapter<PopularPageAdapter.AuthorViewHolder>{
+public class PopularPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
 
     //接受来popular fragment 的数据源
@@ -37,7 +38,13 @@ public class PopularPageAdapter extends RecyclerView.Adapter<PopularPageAdapter.
     private ArrayList<String> picUrlList;
     private ArrayList<String> dateList;
     private Application context;
-    private LinearLayoutManager mLinearLayout;
+
+    private final int TYPE_FOOTER =1;
+    private final int TYPE_ITEM =0;
+
+    private static int numOfNews = 10;
+
+    public FootBar footBar;
 
     //实例化点击时间接口
     private OnItemClickListener onItemClickListener;
@@ -48,12 +55,10 @@ public class PopularPageAdapter extends RecyclerView.Adapter<PopularPageAdapter.
      *  constructor
      * @param context
      * @param list
-     * @param linearLayout
      */
-    public PopularPageAdapter(Application context, ArrayList<List<String>> list, LinearLayoutManager linearLayout){
+    public PopularPageAdapter(Application context, ArrayList<ArrayList<String>> list ){
 
         this.context = context;
-        this.mLinearLayout = linearLayout;
 
         if(list!=null){
             Log.d("tag","container is not empty, size = " + list.size());
@@ -62,12 +67,27 @@ public class PopularPageAdapter extends RecyclerView.Adapter<PopularPageAdapter.
             dateList = (ArrayList<String>) list.get(3);
             picUrlList = (ArrayList<String>) list.get(4);
 
-            //Log.d("tag","titleList is not empty, size = " + titleList.size());
+            Log.d("tag","titleList is not empty, size = " + titleList.size());
             //Log.d("tag","descripeList is not empty, size = " + descripeList.size());
            // Log.d("tag","picUrlList is not empty, size = " + picUrlList.size());
         } else {
             Log.d("tag","Container is  empty " );
         }
+    }
+
+
+    /**
+     * updata data from internet
+     * @param list
+     */
+    public void updateData( ArrayList<ArrayList<String>> list){
+        titleList = (ArrayList<String>) list.get(0);
+        dateList = (ArrayList<String>) list.get(3);
+        picUrlList = (ArrayList<String>) list.get(4);
+        footBar.initFootMsg();
+        initNumOfNews();
+
+
     }
 
 
@@ -78,12 +98,23 @@ public class PopularPageAdapter extends RecyclerView.Adapter<PopularPageAdapter.
      * @return
      */
     @Override
-    public PopularPageAdapter.AuthorViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View childView = inflater.inflate(R.layout.popular_page_layout,parent,false);
+        RecyclerView.ViewHolder holder =null;
 
-        PopularPageAdapter.AuthorViewHolder viewHolder= new AuthorViewHolder(childView);
-        return  viewHolder;
+        if (viewType == TYPE_ITEM) {
+            View childView = inflater.inflate(R.layout.popular_page_layout,parent,false);
+
+            holder = new AuthorViewHolder(childView);
+        } else if (viewType == TYPE_FOOTER) {
+            View childView = inflater.inflate(R.layout.foot_recyclerview_layout,parent,false);
+
+            //save one instance of foot bar
+            footBar =  new FootBar(childView);
+
+            holder =footBar;
+        }
+        return  holder;
     }
 
     /**
@@ -92,24 +123,33 @@ public class PopularPageAdapter extends RecyclerView.Adapter<PopularPageAdapter.
      * @param position
      */
     @Override
-    public void onBindViewHolder(final PopularPageAdapter.AuthorViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
 
-        holder.mTitleView.setText(titleList.get(position));
-        holder.mTimeView.setText(dateList.get(position));
 
-        //添加监听事件
-        if (onItemClickListener != null) {
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onItemClickListener.onItemClick(holder.itemView,holder.getLayoutPosition());
-                }
-            });
+        if(holder instanceof AuthorViewHolder){
+
+            ((AuthorViewHolder)holder).mTitleView.setText(titleList.get(position));
+            ((AuthorViewHolder)holder).mTimeView.setText(dateList.get(position));
+
+            //添加监听事件
+            if (onItemClickListener != null) {
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        onItemClickListener.onItemClick(holder.itemView,holder.getLayoutPosition());
+                    }
+                });
+            }
+
+            //异步下载图片并且加载  download Img
+            DownLoadImgUtil task = new DownLoadImgUtil( ((AuthorViewHolder)holder).imgItem,context);
+            task.execute(picUrlList.get(position));
+        } else {
+
+            //we can do something  for foot view, but not now
         }
 
-        //异步下载图片并且加载  download Img
-        DownLoadImgUtil task = new DownLoadImgUtil(holder.imgItem,context);
-        task.execute(picUrlList.get(position));
+
 
 
     }
@@ -132,8 +172,37 @@ public class PopularPageAdapter extends RecyclerView.Adapter<PopularPageAdapter.
      */
     @Override
     public int getItemCount() {
-        return 10;
+        return titleList.size() == 0 ? 0 : numOfNews + 1;
     }
+
+
+    public void setNumOfNews(){
+        numOfNews = 20;
+        //update data
+        notifyDataSetChanged();
+    }
+
+    public void initNumOfNews(){
+        numOfNews = 10;
+        //update data
+        notifyDataSetChanged();
+    }
+
+    /**
+     * get the view type
+     *
+     * @param position
+     * @return
+     */
+    @Override
+    public int getItemViewType(int position) {
+        if (position + 1 == getItemCount()) {
+            return TYPE_FOOTER;
+        } else {
+            return TYPE_ITEM;
+        }
+    }
+
 
     /**
      * this class just a view use for showing the  news in popularPage
@@ -155,4 +224,26 @@ public class PopularPageAdapter extends RecyclerView.Adapter<PopularPageAdapter.
     }
 
 
+    /**
+     * user for show "Loading" or "It's the End"
+     */
+    public class FootBar extends RecyclerView.ViewHolder{
+
+        TextView footMsg;
+        ProgressBar progressBar;
+        public FootBar(View itemView){
+            super(itemView);
+            footMsg = itemView.findViewById(R.id.foot_message);
+            progressBar = itemView.findViewById(R.id.progressBar);
+        }
+
+        public void setFootMsg(){
+            progressBar.setVisibility(View.GONE);
+            footMsg.setText("It's the End!");
+        }
+        public void initFootMsg(){
+            progressBar.setVisibility(View.VISIBLE);
+            footMsg.setText("Loading");
+        }
+    }
 }

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -30,6 +31,12 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public static final int ONE_ITEM = 1;
     public static final int TWO_ITEM = 2;
+    public static final int TYPE_FOOTER =3;
+
+
+    private static int numOfNews = 10;
+
+    public FootBar footBar;
 
 
     //datas from the internet
@@ -73,9 +80,14 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if(ONE_ITEM == viewType){
             View v = inflater.inflate(R.layout.home_page_layout_one,parent,false);
             holder = new OneViewHolder(v);
-        }else {
+        }else if(viewType == TWO_ITEM) {
             View v = inflater.inflate(R.layout.home_page_layout_two,parent,false);
             holder = new TwoViewHolder(v);
+        } else {
+            View childView = inflater.inflate(R.layout.foot_recyclerview_layout,parent,false);
+            //save one instance of foot bar
+            footBar =  new FootBar(childView);
+            holder =footBar;
         }
 
         return holder;
@@ -97,7 +109,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             task.execute(mPicUrlList.get(position));
 
 
-        } else {
+        } else if(holder instanceof TwoViewHolder) {
 
             ((TwoViewHolder)holder).mTitle.setText(mTitleList.get(position));
             ((TwoViewHolder)holder).mTime.setText(mDateList.get(position));
@@ -139,20 +151,50 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public int getItemViewType(int position){
         if(position==0){
             return ONE_ITEM;
+        }else if(position + 1 == getItemCount()){
+            return TYPE_FOOTER;
         }else {
             return TWO_ITEM;
         }
     }
+
+
+    /**
+     * updata data from internet
+     * @param list
+     */
+    public void updateData( ArrayList<ArrayList<String>> list){
+        mTitleList = (ArrayList<String>) list.get(0);
+        mDateList = (ArrayList<String>) list.get(3);
+        mPicUrlList = (ArrayList<String>) list.get(4);
+        footBar.initFootMsg();
+        initNumOfNews();
+
+
+    }
+
 
     /**
      *
      * @return the number of view in RecyclerView
      */
     @Override
-    public int getItemCount(){
-        return 10;
+    public int getItemCount() {
+        return mTitleList.size() == 0 ? 0 : numOfNews + 1;
     }
 
+
+    public void setNumOfNews(){
+        numOfNews = 20;
+        //update data
+        notifyDataSetChanged();
+    }
+
+    public void initNumOfNews(){
+        numOfNews = 10;
+        //update data
+        notifyDataSetChanged();
+    }
 
     /**
      * this class just a view use for showing the first news in HomePage
@@ -186,6 +228,29 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mImgItem = (ImageView) itemView.findViewById(R.id.iv_portrait_home);
             mTitle = (TextView) itemView.findViewById(R.id.tv_title_home);
             mTime = (TextView) itemView.findViewById(R.id.tv_time_home);
+        }
+    }
+
+    /**
+     * user for show "Loading" or "It's the End"
+     */
+    public class FootBar extends RecyclerView.ViewHolder{
+
+        TextView footMsg;
+        ProgressBar progressBar;
+        public FootBar(View itemView){
+            super(itemView);
+            footMsg = itemView.findViewById(R.id.foot_message);
+            progressBar = itemView.findViewById(R.id.progressBar);
+        }
+
+        public void setFootMsg(){
+            progressBar.setVisibility(View.GONE);
+            footMsg.setText("It's the End!");
+        }
+        public void initFootMsg(){
+            progressBar.setVisibility(View.VISIBLE);
+            footMsg.setText("Loading");
         }
     }
 }
