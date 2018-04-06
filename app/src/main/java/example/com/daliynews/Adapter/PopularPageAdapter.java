@@ -1,6 +1,9 @@
 package example.com.daliynews.Adapter;
 
 import android.app.Application;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import example.com.daliynews.R;
+import example.com.daliynews.database.DBOperation;
 import example.com.daliynews.interfaces.OnItemClickListener;
 import example.com.daliynews.until.DownLoadImgUtil;
 
@@ -41,10 +45,9 @@ public class PopularPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private final int TYPE_FOOTER =1;
     private final int TYPE_ITEM =0;
-
     private static int numOfNews = 10;
-
     public FootBar footBar;
+    private DBOperation mDbOperation;
 
     //实例化点击时间接口
     private OnItemClickListener onItemClickListener;
@@ -59,6 +62,7 @@ public class PopularPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public PopularPageAdapter(Application context, ArrayList<ArrayList<String>> list ){
 
         this.context = context;
+        mDbOperation = new DBOperation(context);
 
         if(list!=null){
             Log.d("tag","container is not empty, size = " + list.size());
@@ -84,8 +88,11 @@ public class PopularPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         titleList = (ArrayList<String>) list.get(0);
         dateList = (ArrayList<String>) list.get(3);
         picUrlList = (ArrayList<String>) list.get(4);
-        footBar.initFootMsg();
-        initNumOfNews();
+        if(footBar!=null){
+            footBar.initFootMsg();
+            initNumOfNews();
+
+        }
 
 
     }
@@ -111,7 +118,6 @@ public class PopularPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             //save one instance of foot bar
             footBar =  new FootBar(childView);
-
             holder =footBar;
         }
         return  holder;
@@ -131,6 +137,23 @@ public class PopularPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ((AuthorViewHolder)holder).mTitleView.setText(titleList.get(position));
             ((AuthorViewHolder)holder).mTimeView.setText(dateList.get(position));
 
+            String sTitle = titleList.get(position).trim();
+
+            if(!mDbOperation.isEmpty("img"+sTitle)){
+                byte[] img = mDbOperation.readImage("img"+sTitle);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(img,0,img.length);
+                BitmapDrawable drawable = new BitmapDrawable(context.getResources(),bitmap);
+                ((AuthorViewHolder) holder).imgItem.setImageDrawable(drawable);
+            }else {
+                //异步下载图片并且加载  download Img
+                DownLoadImgUtil task = new DownLoadImgUtil( ((AuthorViewHolder)holder).imgItem,context,true,"img"+sTitle);
+                task.execute(picUrlList.get(position));
+            }
+
+
+
+
+
             //添加监听事件
             if (onItemClickListener != null) {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -140,10 +163,6 @@ public class PopularPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     }
                 });
             }
-
-            //异步下载图片并且加载  download Img
-            DownLoadImgUtil task = new DownLoadImgUtil( ((AuthorViewHolder)holder).imgItem,context);
-            task.execute(picUrlList.get(position));
         } else {
 
             //we can do something  for foot view, but not now

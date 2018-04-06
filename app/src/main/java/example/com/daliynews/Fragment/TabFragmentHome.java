@@ -129,42 +129,48 @@ public class TabFragmentHome extends Fragment {
         //up pull for refreshing
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
             public void onRefresh() {
-                //finish refresh operation
-                //数据重新加载完成后，提示数据发生改变，并且设置现在不再刷新
-                containerList.clear();
-                Log.d("tag","after clear ,contanerList size "+containerList.size());
 
-                Observable< ArrayList<ArrayList<String>>> observable = (Observable<ArrayList<ArrayList<String>>>) Observable.create(new ObservableOnSubscribe< ArrayList<ArrayList<String>>>() {
-                    @Override
-                    public void subscribe(ObservableEmitter<ArrayList<ArrayList<String>> > emitter) throws Exception {
-                        emitter.onNext(downLoadXmlFile());
-                        Log.d("tag","observable send it");
-                    }
-                });
-                Consumer<ArrayList<ArrayList<String>>> consumer = new Consumer<ArrayList<ArrayList<String>>>() {
-                    @Override
-                    public void accept(ArrayList<ArrayList<String>> arrayLists) throws Exception {
+                if(NetWorkUtil.isNetworkConnected(getContext())){
+                    //finish refresh operation
+                    //数据重新加载完成后，提示数据发生改变，并且设置现在不再刷新
+                    containerList.clear();
+                    Log.d("tag","after clear ,contanerList size "+containerList.size());
 
-                        if(arrayLists.size()!=0){
-                            Log.d("tag","observer get it");
-                            Log.d("tag","observer ,size of container "+arrayLists.size());
-                            containerList = arrayLists;
-                            Log.d("tag","after reload ,contanerList size "+containerList.size());
-
-                            //update data
-                            mAdapter.updateData(arrayLists);
-                            mRefreshLayout.setRefreshing(false);
-                        } else {
-                            Log.d("tag","observer do not get it");
+                    Observable< ArrayList<ArrayList<String>>> observable = (Observable<ArrayList<ArrayList<String>>>) Observable.create(new ObservableOnSubscribe< ArrayList<ArrayList<String>>>() {
+                        @Override
+                        public void subscribe(ObservableEmitter<ArrayList<ArrayList<String>> > emitter) throws Exception {
+                            emitter.onNext(downLoadXmlFile());
+                            Log.d("tag","observable send it");
                         }
+                    });
+                    Consumer<ArrayList<ArrayList<String>>> consumer = new Consumer<ArrayList<ArrayList<String>>>() {
+                        @Override
+                        public void accept(ArrayList<ArrayList<String>> arrayLists) throws Exception {
 
-                    }
-                };
-                observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(consumer);
+                            if(arrayLists.size()!=0){
+                                Log.d("tag","observer get it");
+                                Log.d("tag","observer ,size of container "+arrayLists.size());
+                                containerList = arrayLists;
+                                Log.d("tag","after reload ,contanerList size "+containerList.size());
 
-                //上述两个函数 和 refresh函数线程不同步。emm 就很难受
-                //Log.d("tag","refresh funtion ,after reload ,contanerList size "+containerList.size());
-                //Toast.makeText(getContext(), "这里需要刷新", Toast.LENGTH_SHORT).show();
+                                //update data
+                                mAdapter.updateData(arrayLists);
+                                mRefreshLayout.setRefreshing(false);
+                            } else {
+                                Log.d("tag","observer do not get it");
+                            }
+
+                        }
+                    };
+                    observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(consumer);
+
+                    //上述两个函数 和 refresh函数线程不同步。emm 就很难受
+                    //Log.d("tag","refresh funtion ,after reload ,contanerList size "+containerList.size());
+                    //Toast.makeText(getContext(), "这里需要刷新", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(getContext(), "Sorry, there is no network for refreshing.", Toast.LENGTH_SHORT).show();
+                }
+
 
             }
         });

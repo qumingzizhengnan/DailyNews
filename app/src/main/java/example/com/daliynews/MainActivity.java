@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ViewPager mViewPager ;
     private Fragment[] mFragmentArrays = new Fragment[3];
     private String[] mTabTitles = new String[3];
+    DBOperation mDbOperate;
 
 
     @Override
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         //initial the database
-        DBOperation dbOperate = new DBOperation(getApplication());
+        mDbOperate = new DBOperation(getApplication());
 
         //init sharedpreference
         SharedPreferenceCacheUtil.init(getApplication());
@@ -164,20 +165,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-            Toast.makeText(this, "nav_camera", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_gallery) {
-            Toast.makeText(this, "nav_gallery", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_slideshow) {
-            Toast.makeText(this, "nav_slideshow", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_manage) {
-            Toast.makeText(this, "nav_manage", Toast.LENGTH_SHORT).show();
+//        if (id == R.id.nav_camera) {
+//            // Handle the camera action
+//            Toast.makeText(this, "nav_camera", Toast.LENGTH_SHORT).show();
+//        } else if (id == R.id.nav_gallery) {
+//            Toast.makeText(this, "nav_gallery", Toast.LENGTH_SHORT).show();
+//        } else if (id == R.id.nav_slideshow) {
+//            Toast.makeText(this, "nav_slideshow", Toast.LENGTH_SHORT).show();
+//        } else
+        if (id == R.id.clear_cache) {
+            mDbOperate.clearCache();
+            Toast.makeText(this, "Clear All Cache", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_share) {
             Toast.makeText(this, "nav_share", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_send) {
-            Toast.makeText(this, "nav_send", Toast.LENGTH_SHORT).show();
         }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

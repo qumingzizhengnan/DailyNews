@@ -1,6 +1,9 @@
 package example.com.daliynews.Adapter;
 
 import android.app.Application;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +16,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import example.com.daliynews.R;
+import example.com.daliynews.database.DBOperation;
 import example.com.daliynews.interfaces.OnItemClickListener;
 import example.com.daliynews.until.DownLoadImgUtil;
 
@@ -44,6 +48,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     ArrayList<String> mPicUrlList;
     ArrayList<String> mDateList;
     private Application mContext;
+    private DBOperation mDbOperation;
 
 
     private OnItemClickListener onItemClickListener;//声明接口变量
@@ -60,6 +65,8 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mTitleList = (ArrayList<String>) list.get(0);
             mDateList = (ArrayList<String>) list.get(3);
             mPicUrlList = (ArrayList<String>) list.get(4);
+
+            mDbOperation = new DBOperation(context);
 
         } else {
             Log.d("tag","Container is  empty " );
@@ -101,21 +108,44 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
 
+
         if(holder instanceof OneViewHolder){
             ((OneViewHolder)holder).mTv.setText(mTitleList.get(position));
+            String sTitle = mTitleList.get(position).trim();
 
-            //异步下载图片并且加载
-            DownLoadImgUtil task = new DownLoadImgUtil(((OneViewHolder) holder).mImg,mContext);
-            task.execute(mPicUrlList.get(position));
+            if(!mDbOperation.isEmpty("img"+sTitle)){
+                byte[] img = mDbOperation.readImage("img"+sTitle);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(img,0,img.length);
+                BitmapDrawable drawable = new BitmapDrawable(mContext.getResources(),bitmap);
+                ((OneViewHolder)holder).mImg.setImageDrawable(drawable);
+
+            }else {
+                //异步下载图片并且加载
+                DownLoadImgUtil task = new DownLoadImgUtil(((OneViewHolder) holder).mImg,mContext,true,"img"+mTitleList.get(position).trim());
+                task.execute(mPicUrlList.get(position));
+            }
+
 
 
         } else if(holder instanceof TwoViewHolder) {
 
             ((TwoViewHolder)holder).mTitle.setText(mTitleList.get(position));
             ((TwoViewHolder)holder).mTime.setText(mDateList.get(position));
-            //异步下载图片并且加载
-            DownLoadImgUtil task = new DownLoadImgUtil(((TwoViewHolder) holder).mImgItem,mContext);
-            task.execute(mPicUrlList.get(position));
+
+            String sTitle = mTitleList.get(position).trim();
+            if(!mDbOperation.isEmpty("img"+sTitle)){
+
+                byte[] img = mDbOperation.readImage("img"+sTitle);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(img,0,img.length);
+                BitmapDrawable drawable = new BitmapDrawable(mContext.getResources(),bitmap);
+                ((TwoViewHolder)holder).mImgItem.setImageDrawable(drawable);
+
+            }else {
+
+                //异步下载图片并且加载
+                DownLoadImgUtil task = new DownLoadImgUtil(((TwoViewHolder) holder).mImgItem,mContext,true,"img"+mTitleList.get(position).trim());
+                task.execute(mPicUrlList.get(position));
+            }
 
         }
 
@@ -167,10 +197,11 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         mTitleList = (ArrayList<String>) list.get(0);
         mDateList = (ArrayList<String>) list.get(3);
         mPicUrlList = (ArrayList<String>) list.get(4);
-        footBar.initFootMsg();
-        initNumOfNews();
+        if(footBar!=null){
+            footBar.initFootMsg();
+            initNumOfNews();
 
-
+        }
     }
 
 

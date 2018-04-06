@@ -16,9 +16,10 @@
         android:id="@+id/imageView"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:scaleType="centerCrop"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="@drawable/dog" />
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp"
+        app:srcCompat="@drawable/dog_radus" />
+
 
 
 

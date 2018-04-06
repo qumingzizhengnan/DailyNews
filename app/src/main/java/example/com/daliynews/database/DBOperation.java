@@ -109,6 +109,10 @@ public class DBOperation {
         return true;
     }
 
+    public void clearCache(){
+        SQLiteDatabase db = dbhelper.getWritableDatabase();
+        db.execSQL("delete from Img where 1=1");
+    }
 
 }
 
