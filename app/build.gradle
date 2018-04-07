@@ -23,29 +23,40 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support:design:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-
     //以下是联网测试
-//    testImplementation 'junit:junit:4.12'
-//    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-//    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-
+    //    testImplementation 'junit:junit:4.12'
+    //    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    //    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation 'com.android.support:cardview-v7:26.1.0'
     // 解析HTML
     implementation 'org.jsoup:jsoup:1.11.1'
-
     // RxJava 2
     implementation 'io.reactivex.rxjava2:rxjava:2.1.9'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
-
     // okhttp 3
     implementation 'com.squareup.okhttp3:okhttp:3.9.1'
     debugImplementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
-
     //video
     implementation 'cn.jzvd:jiaozivideoplayer:6.2.9'
-
+    //support for wechat
+    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
+    implementation files('libs/MobCommons-2018.0322.1145.jar')
+    implementation files('libs/MobTools-2018.0322.1147.jar')
+    implementation files('libs/ShareSDK-Core-3.1.4.jar')
+    implementation files('libs/ShareSDK-Email-3.1.4.jar')
+    implementation files('libs/ShareSDK-Facebook-3.1.4.jar')
+    implementation files('libs/ShareSDK-QQ-3.1.4.jar')
+    implementation files('libs/ShareSDK-QZone-3.1.4.jar')
+    implementation files('libs/ShareSDK-ShortMessage-3.1.4.jar')
+    implementation files('libs/ShareSDK-SinaWeibo-3.1.4.jar')
+    implementation files('libs/ShareSDK-TencentWeibo-3.1.4.jar')
+    implementation files('libs/ShareSDK-Twitter-3.1.4.jar')
+    implementation files('libs/ShareSDK-Wechat-3.1.4.jar')
+    implementation files('libs/ShareSDK-Wechat-Core-3.1.4.jar')
+    implementation files('libs/ShareSDK-Wechat-Favorite-3.1.4.jar')
+    implementation files('libs/ShareSDK-Wechat-Moments-3.1.4.jar')
 }

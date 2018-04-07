@@ -11,7 +11,7 @@ import android.support.v7.app.AppCompatActivity;
  */
 public class SplashActivity extends AppCompatActivity {
     //延迟3秒
-    private static final long SPLASH_DELAY_MILLIS = 4000;
+    private static final long SPLASH_DELAY_MILLIS = 3000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

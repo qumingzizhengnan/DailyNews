@@ -1,9 +1,9 @@
 package example.com.daliynews.Fragment;
 
 import android.content.Intent;
-import android.os.AsyncTask;
+
 import android.os.Bundle;
-import android.os.Handler;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,20 +17,19 @@ import android.widget.Toast;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import java.io.BufferedReader;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+
 import java.io.StringReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+
 import java.util.ArrayList;
 
+import cn.sharesdk.onekeyshare.OnekeyShare;
 import example.com.daliynews.Adapter.HomePageAdapter;
-import example.com.daliynews.Adapter.PopularPageAdapter;
+
 import example.com.daliynews.NewsActivity;
 import example.com.daliynews.R;
-import example.com.daliynews.interfaces.EndLessOnScrollListener;
+
 import example.com.daliynews.interfaces.OnItemClickListener;
 import example.com.daliynews.until.NetWorkUtil;
 import io.reactivex.Observable;
@@ -61,6 +60,7 @@ public class TabFragmentHome extends Fragment {
 
     private ArrayList<ArrayList<String>> containerList = new ArrayList<ArrayList<String>>();
     private HomePageAdapter mAdapter;
+
 
 
     /**
@@ -166,7 +166,7 @@ public class TabFragmentHome extends Fragment {
 
                     //上述两个函数 和 refresh函数线程不同步。emm 就很难受
                     //Log.d("tag","refresh funtion ,after reload ,contanerList size "+containerList.size());
-                    //Toast.makeText(getContext(), "这里需要刷新", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Update Successfully", Toast.LENGTH_SHORT).show();
                 }else {
                     Toast.makeText(getContext(), "Sorry, there is no network for refreshing.", Toast.LENGTH_SHORT).show();
                 }
@@ -186,9 +186,10 @@ public class TabFragmentHome extends Fragment {
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(getActivity(), "position is "+ position, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "position is "+ position, Toast.LENGTH_SHORT).show();
                 //send the url for news activity
                 Intent intent = new Intent(getActivity(),NewsActivity.class);
+                intent.putExtra("TiTle",((ArrayList<String>)containerList.get(0)).get(position));
                 intent.putExtra("URL",((ArrayList<String>)containerList.get(2)).get(position));
                 intent.putExtra("IMG_URL",((ArrayList<String>)containerList.get(4)).get(position));
                 startActivity(intent);
@@ -251,11 +252,11 @@ public class TabFragmentHome extends Fragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle saveInstanceState){
+        Log.d("fragment","fragment home_ oncreate view");
 
         mRootView = inflater.inflate(R.layout.fragment_tab,container,false);
 
-        if(NetWorkUtil.isNetworkConnected(getContext())){
-
+        if(NetWorkUtil.isNetworkConnected(getContext()) ){
             Observable<ArrayList<ArrayList<String>>> observable = (Observable<ArrayList<ArrayList<String>>>) Observable.create(new ObservableOnSubscribe<ArrayList<ArrayList<String>>>() {
                 @Override
                 public void subscribe(final ObservableEmitter<ArrayList<ArrayList<String>>> emitter ) throws Exception {
@@ -270,9 +271,6 @@ public class TabFragmentHome extends Fragment {
                 }
             };
             observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(consumer);
-
-            //new DownloadTask().execute();
-
         } else {
             Log.d("tag","网络无连接");
             Toast.makeText(getContext(), "网络无连接", Toast.LENGTH_SHORT).show();
@@ -373,6 +371,40 @@ public class TabFragmentHome extends Fragment {
 
         //Log.d("tag","解析结束");
         return  container;
+    }
+
+
+
+
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        Log.d("fragment","frament home_onstart");
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        Log.d("fragment","frament home_onresume");
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        Log.d("fragment","frament home_onpause");
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        Log.d("fragment","frament home_onstop");
+    }
+
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+        Log.d("fragment","frament home_ondestroyview");
     }
 
 
