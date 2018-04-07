@@ -52,15 +52,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //悬浮按钮
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -170,7 +161,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Toast.makeText(this, "Clear All Cache", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_share) {
 
-            Toast.makeText(this, "nav_share", Toast.LENGTH_SHORT).show();
+            //share my github for this apps
+            //Toast.makeText(this, "nav_share", Toast.LENGTH_SHORT).show();
             Intent textIntent = new Intent(Intent.ACTION_SEND);
             textIntent.setType("text/plain");
             textIntent.putExtra(Intent.EXTRA_TEXT, "https://github.com/Alan-CQU/DailyNews");
