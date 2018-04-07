@@ -111,7 +111,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         if(holder instanceof OneViewHolder){
             ((OneViewHolder)holder).mTv.setText(mTitleList.get(position));
-            String sTitle = mTitleList.get(position).trim();
+            String sTitle = mTitleList.get(position).substring(0,10).trim();
 
             if(!mDbOperation.isEmpty("img"+sTitle)){
                 byte[] img = mDbOperation.readImage("img"+sTitle);
@@ -121,7 +121,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             }else {
                 //异步下载图片并且加载
-                DownLoadImgUtil task = new DownLoadImgUtil(((OneViewHolder) holder).mImg,mContext,true,"img"+mTitleList.get(position).trim());
+                DownLoadImgUtil task = new DownLoadImgUtil(((OneViewHolder) holder).mImg,mContext,true,"img"+sTitle);
                 task.execute(mPicUrlList.get(position));
             }
 
@@ -129,13 +129,14 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         } else if(holder instanceof TwoViewHolder) {
 
+            String sTitle1 = mTitleList.get(position).substring(0,10).trim();
             ((TwoViewHolder)holder).mTitle.setText(mTitleList.get(position));
             ((TwoViewHolder)holder).mTime.setText(mDateList.get(position));
 
-            String sTitle = mTitleList.get(position).trim();
-            if(!mDbOperation.isEmpty("img"+sTitle)){
 
-                byte[] img = mDbOperation.readImage("img"+sTitle);
+            if(!mDbOperation.isEmpty("img"+sTitle1)){
+
+                byte[] img = mDbOperation.readImage("img"+sTitle1);
                 Bitmap bitmap = BitmapFactory.decodeByteArray(img,0,img.length);
                 BitmapDrawable drawable = new BitmapDrawable(mContext.getResources(),bitmap);
                 ((TwoViewHolder)holder).mImgItem.setImageDrawable(drawable);
@@ -143,7 +144,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }else {
 
                 //异步下载图片并且加载
-                DownLoadImgUtil task = new DownLoadImgUtil(((TwoViewHolder) holder).mImgItem,mContext,true,"img"+mTitleList.get(position).trim());
+                DownLoadImgUtil task = new DownLoadImgUtil(((TwoViewHolder) holder).mImgItem,mContext,true,"img"+sTitle1);
                 task.execute(mPicUrlList.get(position));
             }
 
@@ -236,8 +237,8 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView  mTv;
         public OneViewHolder(View view){
             super(view);
-            mImg = (ImageView) view.findViewById(R.id.image_item_one);
-            mTv = (TextView) view.findViewById(R.id.tv_item_one);
+            mImg = (ImageView) view.findViewById(R.id.image_lead_story);
+            mTv = (TextView) view.findViewById(R.id.tv_lead_story);
         }
 
     }

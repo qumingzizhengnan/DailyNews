@@ -12,7 +12,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     private static SQLiteHelper dbHelper;
 
 
-    private final String createTb="CREATE TABLE Img (id INTEGER PRIMARY KEY AUTOINCREMENT,name varchar(50),avatar BLOB)";
+    private final String createTb="CREATE TABLE Img (id INTEGER PRIMARY KEY AUTOINCREMENT,name varchar(255),avatar BLOB)";
 
     public SQLiteHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);

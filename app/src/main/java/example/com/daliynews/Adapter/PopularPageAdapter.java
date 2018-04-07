@@ -137,7 +137,7 @@ public class PopularPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ((AuthorViewHolder)holder).mTitleView.setText(titleList.get(position));
             ((AuthorViewHolder)holder).mTimeView.setText(dateList.get(position));
 
-            String sTitle = titleList.get(position).trim();
+            String sTitle = titleList.get(position).substring(0,10).trim();
 
             if(!mDbOperation.isEmpty("img"+sTitle)){
                 byte[] img = mDbOperation.readImage("img"+sTitle);

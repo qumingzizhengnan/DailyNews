@@ -50,14 +50,17 @@ public class DBOperation {
         //Cursor cur=db.query("Img", new String[]{"_id","avatar"}, null, null, null, null, null);
         Cursor cur=db.rawQuery("select * from Img where name=?", new String[]{name});
         byte[] imgData=null;
-        if(cur.moveToNext()){
+        if(cur.moveToFirst()){
+            Log.d("tag","读取数据时 cursor size "+cur.getCount());
             //将Blob数据转化为字节数组
             imgData=cur.getBlob(cur.getColumnIndex("avatar"));
+            cur.close();
+            //db.close();
         }
         return imgData;
     }
-    //图片转为二进制数据
-//    public static byte[] bitmabToBytes(Context context){
+//    //图片转为二进制数据
+//    public static byte[] bitmapToBytes(Context context){
 //        //将图片转化为位图
 //        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher);
 //        int size = bitmap.getWidth() * bitmap.getHeight() * 4;
@@ -82,11 +85,6 @@ public class DBOperation {
 //    }
 
 
-//    public void deleteImageData(){
-//        SQLiteDatabase db = dbhelper.getWritableDatabase();
-//        //db.execSQL("delete from Img where id = 1 ");
-//        //db.execSQL("delete from Img where id = 1 ");
-//    }
 
 
     /**
@@ -99,11 +97,23 @@ public class DBOperation {
 
         SQLiteDatabase db = dbhelper.getWritableDatabase();
         Cursor cursor = db.rawQuery("select * from Img where name=?",new String[]{selectionArgs});
-        if(cursor.moveToNext()){
+        if(cursor.getCount()!=0){
+            boolean hasmovetofirst = cursor.moveToFirst();
+
+            Log.d("tag","查询是否已经存在 cursor size is "+cursor.getCount());
+            Log.d("tag","has move to first msg "+hasmovetofirst);
+            Log.d("tag","is the first msg "+cursor.isFirst());
+
             String name = cursor.getString(cursor.getColumnIndex("name"));
-            Log.d("tag","img has restored, name is :"+name);
+            int id = cursor.getInt(cursor.getColumnIndex("id"));
+            Log.d("tag","img has restored,id is  " + id);
+            Log.d("tag","img has restored,name is  " + name);
+            cursor.close();
+            //db.close();
             return  false;
         }else {
+            cursor.close();
+            //db.close();
             Log.d("tag","nothing find return");
         }
         return true;

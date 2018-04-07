@@ -9,6 +9,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import example.com.daliynews.database.DBOperation;
@@ -93,7 +95,7 @@ public class DownLoadImgUtil extends AsyncTask<String ,Void,BitmapDrawable> {
         try {
             Response response = client.newCall(request).execute();
             byte[] img = response.body().bytes();
-            String imgFile = new String(img,0,img.length);
+
             //bitmap = BitmapFactory.decodeStream(response.body().byteStream());
             bitmap = BitmapFactory.decodeByteArray(img,0,img.length);
 
@@ -101,7 +103,7 @@ public class DownLoadImgUtil extends AsyncTask<String ,Void,BitmapDrawable> {
             if(cache){
                 //if database don't have record, save the picture
                 if(dbOperation.isEmpty(name)){
-                    dbOperation.saveImage(img ,name);
+                    dbOperation.saveImage(compressImage(bitmap) ,name);
                     Log.d("tag","insert img data");
                 }
             }
@@ -113,6 +115,25 @@ public class DownLoadImgUtil extends AsyncTask<String ,Void,BitmapDrawable> {
         return bitmap;
     }
 
+
+
+
+    /**
+     * 质量压缩方法
+     * @param image
+     * @return
+     */
+    public static byte[]  compressImage(Bitmap image) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+        int options = 90;
+        while (baos.toByteArray().length / 1024 > 500) { // 循环判断如果压缩后图片是否大于500kb,大于继续压缩
+            baos.reset(); // 重置baos即清空baos
+            image.compress(Bitmap.CompressFormat.JPEG, options, baos);// 这里压缩options%，把压缩后的数据存放到baos中
+            options -= 10;// 每次都减少10
+        }
+        return baos.toByteArray();
+    }
 
 
     @Override

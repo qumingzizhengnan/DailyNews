@@ -1,5 +1,6 @@
 package example.com.daliynews;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -69,11 +70,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        //toolbar.setVisibility(View.GONE);
 
 
         //分页显示 tab + viewpager
-        mTabLayout = (TabLayout) findViewById(R.id.tablayout);
+        mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
         mViewPager = (ViewPager) findViewById(R.id.tab_viewpager);
 
         mTabTitles[0] = "Home";
@@ -165,19 +165,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-//        if (id == R.id.nav_camera) {
-//            // Handle the camera action
-//            Toast.makeText(this, "nav_camera", Toast.LENGTH_SHORT).show();
-//        } else if (id == R.id.nav_gallery) {
-//            Toast.makeText(this, "nav_gallery", Toast.LENGTH_SHORT).show();
-//        } else if (id == R.id.nav_slideshow) {
-//            Toast.makeText(this, "nav_slideshow", Toast.LENGTH_SHORT).show();
-//        } else
         if (id == R.id.clear_cache) {
             mDbOperate.clearCache();
             Toast.makeText(this, "Clear All Cache", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_share) {
+
             Toast.makeText(this, "nav_share", Toast.LENGTH_SHORT).show();
+            Intent textIntent = new Intent(Intent.ACTION_SEND);
+            textIntent.setType("text/plain");
+            textIntent.putExtra(Intent.EXTRA_TEXT, "https://github.com/Alan-CQU/DailyNews");
+            startActivity(Intent.createChooser(textIntent, "分享github"));
+
         }
 
 
