@@ -13,11 +13,16 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -59,11 +64,14 @@ public class NewsActivity extends AppCompatActivity {
     private TextView mContent;
     private ImageView mImg;
     private DBOperation mDbOperation;
+    private NewsToolBar mToolBar;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.news_layout);
+
 
         mDbOperation = new DBOperation(getApplication());
         mImg = (ImageView) findViewById(R.id.img_newPicture);
@@ -75,6 +83,9 @@ public class NewsActivity extends AppCompatActivity {
         final String urlNews = mIintentReceiveURL.getStringExtra("URL");
         mFormerPageImgUrl = mIintentReceiveURL.getStringExtra("IMG_URL");
         final String title = mIintentReceiveURL.getStringExtra("TiTle");
+
+        mToolBar = (NewsToolBar)findViewById(R.id.newsToolBar);
+        initToolbar();
 
         //悬浮按钮
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -231,6 +242,17 @@ public class NewsActivity extends AppCompatActivity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void initToolbar() {
+        mToolBar.setLeftTitleClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+    }
+
 
     /**
      *
@@ -293,5 +315,6 @@ public class NewsActivity extends AppCompatActivity {
         // 启动分享GUI
         oks.show(this);
     }
+    
 
 }

@@ -25,7 +25,7 @@
         android:ellipsize="end"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="@color/ind_red"
+        android:textColor="#1d2088"
         android:text="news news "
         android:paddingBottom="4dp"/>
 </LinearLayout>
