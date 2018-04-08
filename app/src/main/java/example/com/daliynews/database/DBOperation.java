@@ -36,7 +36,7 @@ public class DBOperation {
         cv.put("name", name);
         cv.put("avatar", imgData);//图片转为二进制
         db.insert("Img", null, cv);
-        db.close();
+        //db.close();
     }
 
     /**
@@ -54,7 +54,7 @@ public class DBOperation {
             Log.d("tag","读取数据时 cursor size "+cur.getCount());
             //将Blob数据转化为字节数组
             imgData=cur.getBlob(cur.getColumnIndex("avatar"));
-            cur.close();
+            //cur.close();
             //db.close();
         }
         return imgData;
@@ -108,12 +108,14 @@ public class DBOperation {
             int id = cursor.getInt(cursor.getColumnIndex("id"));
             Log.d("tag","img has restored,id is  " + id);
             Log.d("tag","img has restored,name is  " + name);
-            cursor.close();
+
             //db.close();
+            //cursor.close();
             return  false;
         }else {
-            cursor.close();
+
             //db.close();
+            //cursor.close();
             Log.d("tag","nothing find return");
         }
         return true;
@@ -122,6 +124,7 @@ public class DBOperation {
     public void clearCache(){
         SQLiteDatabase db = dbhelper.getWritableDatabase();
         db.execSQL("delete from Img where 1=1");
+        db.close();
     }
 
 }
