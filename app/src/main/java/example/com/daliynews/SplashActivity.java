@@ -16,13 +16,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_layout);
-       /* // 使用Handler的postDelayed方法，3秒后执行跳转到MainActivity
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                startMainActivity();
-            }
-        }, SPLASH_DELAY_MILLIS);*/
-       showSplash();
+        showSplash();
     }
 
     /**

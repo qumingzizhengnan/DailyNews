@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import example.com.daliynews.Fragment.TabFragmentHome;
+import example.com.daliynews.Fragment.TabFragmentPolitics;
 import example.com.daliynews.Fragment.TabFragmentPopular;
 import example.com.daliynews.Fragment.TabFragmentVideo;
 import example.com.daliynews.database.DBOperation;
@@ -35,8 +36,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //these components are used to show pages
     private TabLayout mTabLayout = null;
     private ViewPager mViewPager ;
-    public Fragment[] mFragmentArrays = new Fragment[3];
-    private String[] mTabTitles = new String[3];
+    public Fragment[] mFragmentArrays = new Fragment[4];
+    private String[] mTabTitles = new String[4];
     DBOperation mDbOperate;
 
 
@@ -45,48 +46,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if(NetWorkUtil.isNetworkConnected(this)){
-            //initial the database
-            mDbOperate = new DBOperation(getApplication());
-
-            //init sharedpreference
-            SharedPreferenceCacheUtil.init(getApplication());
-            Log.d("tag","初始化sharaePreference 成功");
-
-            //Toolbar +  drawerlayout
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-
-
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-            drawer.addDrawerListener(toggle);
-            toggle.syncState();
-
-            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-            navigationView.setNavigationItemSelectedListener(this);
-
-
-            //分页显示 tab + viewpager
-            mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
-            mViewPager = (ViewPager) findViewById(R.id.tab_viewpager);
-
-            mTabTitles[0] = "Home";
-            mTabTitles[1] = "Popular";
-            mTabTitles[2] = "Video";
-            //固定三个板块间距
-            mTabLayout.setTabMode(TabLayout.MODE_FIXED);
-
-            //实例化三个fragment 每个fragment采用不同的recycleView 适配器，实现不同布局的页面
-            mFragmentArrays[0] = TabFragmentHome.newInstance();
-            mFragmentArrays[1] = TabFragmentPopular.newInstance();
-            mFragmentArrays[2] = TabFragmentVideo.newInstance();
-
-            PagerAdapter pagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
-            mViewPager.setAdapter(pagerAdapter);
-            mTabLayout.setupWithViewPager(mViewPager);
-        } else {
+        //if we don't have internet at first ,show some msg
+        if(!NetWorkUtil.isNetworkConnected(this)){
             AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
             dialog.setTitle("Warning");
             dialog.setMessage("You don't have the internet connecting, we cann't offer service for you.");
@@ -95,12 +56,55 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    finish();
+
                 }
             });
 
             dialog.show();
         }
+
+        //initial the database
+        mDbOperate = new DBOperation(getApplication());
+
+        //init sharedpreference
+        SharedPreferenceCacheUtil.init(getApplication());
+        Log.d("tag","初始化sharaePreference 成功");
+
+        //Toolbar +  drawerlayout
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+
+        //分页显示 tab + viewpager
+        mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        mViewPager = (ViewPager) findViewById(R.id.tab_viewpager);
+
+        mTabTitles[0] = "Home";
+        mTabTitles[1] = "Business";
+        mTabTitles[2] = "Politics";
+        mTabTitles[3] = "Video";
+        //固定三个板块间距
+        mTabLayout.setTabMode(TabLayout.MODE_FIXED);
+
+        //实例化三个fragment 每个fragment采用不同的recycleView 适配器，实现不同布局的页面
+        mFragmentArrays[0] = TabFragmentHome.newInstance();
+        mFragmentArrays[1] = TabFragmentPopular.newInstance();
+        mFragmentArrays[2] = TabFragmentPolitics.newInstance();
+        mFragmentArrays[3] = TabFragmentVideo.newInstance();
+
+        PagerAdapter pagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(pagerAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
 
 
     }

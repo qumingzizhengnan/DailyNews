@@ -12,7 +12,7 @@
     android:fitsSystemWindows="true"
     app:contentInsetLeft="0dp"
     app:contentInsetStart="0dp"
-    android:background="#1d2088"
+    android:background="#f0f0f0"
     android:id="@+id/newsToolBar"
     app:popupTheme="@style/AppTheme.PopupOverlay">
 

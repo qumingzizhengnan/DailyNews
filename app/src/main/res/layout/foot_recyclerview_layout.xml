@@ -4,23 +4,26 @@
     android:layout_width="match_parent"
     android:layout_height="60dp"
     android:gravity="center"
+    android:background="#1d2088"
     android:orientation="horizontal"
     >
 
 
     <ProgressBar
-        android:layout_marginRight="6dp"
         android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleSmall"
+
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:layout_marginRight="6dp"
+        android:progressDrawable="@android:color/holo_blue_dark" />
 
     <TextView
         android:id="@+id/foot_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:textColor="#FFFFFF"
         android:textSize="26dp"
         android:text="Loading" />
 
