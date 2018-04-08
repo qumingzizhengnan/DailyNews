@@ -13,7 +13,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="#ffffff"
+                android:padding="20dp" />
             <TextView
                 android:id="@+id/tv_newsTitle"
                 android:layout_width="match_parent"
@@ -22,7 +26,14 @@
                 android:padding="16dp"
                 android:text=""
                 android:textColor="#000000"
-                android:textSize="28sp" />
+                android:textSize="24sp"
+                android:textStyle="bold"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#22000000"
+                android:padding="20dp" />
 
             <ImageView
                 android:paddingHorizontal="16dp"
@@ -32,12 +43,7 @@
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/bear"
                 android:background="@android:color/white"
-                android:paddingBottom="16dp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="#22000000"/>
+                android:padding="16dp" />
 
             <TextView
                 android:id="@+id/tv_newsContent"
@@ -51,6 +57,13 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <include
+        layout="@layout/newstoolbar"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="top"
+        android:layout_alignParentTop="true"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

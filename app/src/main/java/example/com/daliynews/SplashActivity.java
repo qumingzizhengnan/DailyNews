@@ -16,22 +16,50 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_layout);
-        // 使用Handler的postDelayed方法，3秒后执行跳转到MainActivity
+       /* // 使用Handler的postDelayed方法，3秒后执行跳转到MainActivity
         new Handler().postDelayed(new Runnable() {
             public void run() {
                 startMainActivity();
             }
-        }, SPLASH_DELAY_MILLIS);
+        }, SPLASH_DELAY_MILLIS);*/
+       showSplash();
     }
 
     /**
      * start MainActivity
      */
-    public void startMainActivity(){
-        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-        SplashActivity.this.startActivity(intent);
-        SplashActivity.this.finish();
 
+    public class Splashhandler implements Runnable{
+
+        @Override
+        public void run() {
+            Intent intent = new Intent(SplashActivity.this,MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    Splashhandler splashhandler;
+    Handler x;
+    public void showSplash(){
+        x = new Handler();
+        splashhandler = new Splashhandler();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(x!=null&&splashhandler!=null){
+            x.removeCallbacks(splashhandler);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(x!=null&&splashhandler!=null){
+            x.postDelayed(splashhandler, SPLASH_DELAY_MILLIS);
+        }
     }
 
 }

@@ -30,7 +30,7 @@
             android:padding="5dp"
             android:lines="2"
             android:text="新闻标题"
-            android:textColor="@color/ind_red"
+            android:textColor="#1d2088"
             android:textSize="18sp"
             android:textStyle="bold" />
 

@@ -16,6 +16,7 @@ import cn.jzvd.JZVideoPlayer;
 import example.com.daliynews.Adapter.VideoPageAdapter;
 
 import example.com.daliynews.R;
+import example.com.daliynews.VideoInfo;
 
 
 /**
@@ -48,7 +49,7 @@ public class TabFragmentVideo extends Fragment {
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
-        VideoPageAdapter mVideoPageAdapter = new VideoPageAdapter(getActivity());
+        VideoPageAdapter mVideoPageAdapter = new VideoPageAdapter(getActivity(), VideoInfo.videoUrls, VideoInfo.videoTitle, VideoInfo.videoImage);
         mRecyclerView.setAdapter(mVideoPageAdapter);
     }
 
