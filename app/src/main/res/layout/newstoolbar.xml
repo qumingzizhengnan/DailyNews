@@ -3,23 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="45dp"
+    android:layout_height="35dp"
     tools:context="example.com.daliynews.NewsActivity">
 
 <example.com.daliynews.NewsToolBar
     android:layout_width="match_parent"
-    android:layout_height="45dp"
+    android:layout_height="35dp"
     android:fitsSystemWindows="true"
     app:contentInsetLeft="0dp"
     app:contentInsetStart="0dp"
-    android:background="#f0f0f0"
+    android:background="#a0a0a0"
     android:id="@+id/newsToolBar"
     app:popupTheme="@style/AppTheme.PopupOverlay">
 
     <TextView
         android:id="@+id/txt_left_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_marginLeft="10dp"
         android:singleLine="true"
         android:text=" "

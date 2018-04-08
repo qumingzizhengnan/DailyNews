@@ -1,8 +1,10 @@
 package example.com.daliynews.Adapter;
 
 import android.app.Application;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import example.com.daliynews.MainActivity;
 import example.com.daliynews.R;
 import example.com.daliynews.database.DBOperation;
 import example.com.daliynews.interfaces.OnItemClickListener;
@@ -235,10 +238,13 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         ImageView mImg;
         TextView  mTv;
+        Typeface font1;
         public OneViewHolder(View view){
             super(view);
             mImg = (ImageView) view.findViewById(R.id.image_lead_story);
             mTv = (TextView) view.findViewById(R.id.tv_lead_story);
+            font1 = Typeface.createFromAsset(mContext.getAssets(),"fonts/BASKVILL.TTF");
+            mTv.setTypeface(font1);
         }
 
     }
@@ -253,6 +259,8 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ImageView mImgItem;
         TextView mTitle;
         TextView mTime;
+        Typeface font1;
+        Typeface font2;
 
         public TwoViewHolder(View itemView){
             super(itemView);
@@ -260,7 +268,13 @@ public class HomePageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             mImgItem = (ImageView) itemView.findViewById(R.id.iv_portrait_home);
             mTitle = (TextView) itemView.findViewById(R.id.tv_title_home);
             mTime = (TextView) itemView.findViewById(R.id.tv_time_home);
+            font1 = Typeface.createFromAsset(mContext.getAssets(),"fonts/BASKVILL.TTF");
+            font2 = Typeface.createFromAsset(mContext.getAssets(),"fonts/ARIALUNI.TTF");
+
+            mTitle.setTypeface(font1);
+            mTime.setTypeface(font2);
         }
+
     }
 
     /**

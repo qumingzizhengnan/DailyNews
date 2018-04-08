@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -65,6 +66,7 @@ public class NewsActivity extends AppCompatActivity {
     private ImageView mImg;
     private DBOperation mDbOperation;
     private NewsToolBar mToolBar;
+    private Typeface font;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -72,11 +74,12 @@ public class NewsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.news_layout);
 
-
+        font = Typeface.createFromAsset(getAssets(),"fonts/BASKVILL.TTF");
         mDbOperation = new DBOperation(getApplication());
         mImg = (ImageView) findViewById(R.id.img_newPicture);
         mTitle = (TextView) findViewById(R.id.tv_newsTitle);
         mContent = (TextView) findViewById(R.id.tv_newsContent);
+        mTitle.setTypeface(font);
 
         //获取网址  get the url of this news from the intent
         mIintentReceiveURL = getIntent();

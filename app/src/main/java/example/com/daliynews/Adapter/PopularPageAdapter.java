@@ -3,6 +3,7 @@ package example.com.daliynews.Adapter;
 import android.app.Application;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -232,6 +233,8 @@ public class PopularPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         ImageView imgItem;
         TextView mTitleView;
         TextView mTimeView;
+        Typeface font1;
+        Typeface font2;
 
         public AuthorViewHolder(View itemView){
             super(itemView);
@@ -239,6 +242,12 @@ public class PopularPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             imgItem = (ImageView) itemView.findViewById(R.id.iv_portrait_popular);
             mTitleView = (TextView) itemView.findViewById(R.id.tv_title_popular);
             mTimeView = (TextView) itemView.findViewById(R.id.tv_time_popular);
+
+            font1 = Typeface.createFromAsset(context.getAssets(),"fonts/BASKVILL.TTF");
+            font2 = Typeface.createFromAsset(context.getAssets(),"fonts/ARIALUNI.TTF");
+
+            mTitleView.setTypeface(font1);
+            mTimeView.setTypeface(font2);
         }
     }
 

@@ -29,9 +29,9 @@
             android:padding="5dp"
             android:lines="2"
             android:text="新闻标题"
-            android:textColor="#1d2088"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textColor="#000000"
+            android:textSize="16sp"
+            />
 
 
 
@@ -44,9 +44,9 @@
             android:layout_toRightOf="@+id/iv_portrait_popular"
             android:padding="5dp"
             android:text="2018/01/01"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="14sp"
-            android:textStyle="bold"/>
+            android:textColor="#1d2088"
+            android:textSize="10sp"
+            />
 
 
     </RelativeLayout>
