@@ -3,6 +3,7 @@ package example.com.daliynews.Adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,10 +78,13 @@ public class VideoPageAdapter extends RecyclerView.Adapter<VideoPageAdapter.Vide
     class VideoViewHolder extends RecyclerView.ViewHolder{
         TextView tv;
         JZVideoPlayerStandard videoPlayer;
+        Typeface font1;
         public VideoViewHolder(View itemView){
             super(itemView);
             tv = (TextView)itemView.findViewById(R.id.tv_item_videotitle);
             videoPlayer =  (JZVideoPlayerStandard) itemView.findViewById(R.id.player_item_video);
+            font1 = Typeface.createFromAsset(mContext.getAssets(),"fonts/BASKVILL.TTF");
+            tv.setTypeface(font1);
         }
     }
 }

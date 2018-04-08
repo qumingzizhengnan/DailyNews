@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     /**
      * the drawerlayout is open when we click back button, close it first
      */
-    @Override
+   @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -197,8 +197,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             showShare();
 
         }
-
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
