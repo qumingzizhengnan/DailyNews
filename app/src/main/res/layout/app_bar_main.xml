@@ -8,22 +8,17 @@
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:theme="@style/toolbar_theme">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="35dp"
             app:title=" "
-            android:background="@drawable/icon_toolbar_gray"
+            android:background="@drawable/toolbar_white"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <!--<ImageView
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:src="@drawable/icon_toolbar_title"
-                android:foregroundGravity="center"
-                />-->
 
          <!-- titleTextColor 可以改-->
         <!-- 高度 可以改-->
