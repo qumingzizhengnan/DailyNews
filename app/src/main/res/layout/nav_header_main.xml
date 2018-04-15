@@ -27,17 +27,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="Developer: Chengjin, Lixin"
+        android:text="Developer: CJ , LX"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="SOFTWARE COLLEGE-CQU " />
+        android:text="Hope you like it" />
     <TextView
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Daliy News      Version_1.4" />
+        android:text="Daliy News  Version_1.4" />
 </LinearLayout>
